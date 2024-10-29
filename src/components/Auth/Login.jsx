@@ -30,16 +30,14 @@ const Login = () => {
 
         }
       } else {
-        // Handle login failure
-        setError('Login failed. Please check your credentials and try again.');
+        setError('Incorrect username or password');
       }
     } catch (error) {
       console.error('Error during login:', error);
-      setError('Login failed. Please check your credentials and try again.');
+      setError('Incorrect username or password');
+  
     }
   };
-  
-  
 
   const handleRegisterRedirect = () => {
     navigate('/register');
@@ -76,6 +74,11 @@ const Login = () => {
                 required
               />
             </div>
+            {error && (
+              <div className="text-red-500 text-center mb-4">
+                {error}
+              </div>
+            )}
             <div className="flex justify-between items-center mb-4">
               <div>
                 <input type="checkbox" id="rememberMe" className="mr-2"/>

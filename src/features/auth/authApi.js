@@ -8,6 +8,12 @@ export const loginUser = (credentials) => async (dispatch) => {
   try {
     const response = await axios.post(`${API_URL}login/`, credentials);
     const data = response.data;
+
+    // If there is an error message, throw it as an error
+    if (data.error) {
+      throw new Error(data.error);
+    }
+    
     dispatch(loginSuccess({ user: data.user_type, access: data.access, refresh: data.refresh }));
     localStorage.setItem('accessToken', data.access);
     localStorage.setItem('refreshToken', data.refresh);

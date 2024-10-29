@@ -15,7 +15,7 @@ const AdminNavbar = () => {
     navigate('/login');
   };
   return (
-    <nav className="bg-blue-600 p-4 shadow-md">
+    <nav className="bg-blue-600 p-4 shadow-md z-10">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or Brand Name */}
         <div className="text-white text-xl font-bold">

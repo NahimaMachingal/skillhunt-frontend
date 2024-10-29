@@ -21,6 +21,11 @@ import PostJob from "./components/employer/PostJob";
 import Jobs from "./components/employer/Jobs";
 import PendingJobs from "./components/Admin/PendingJobs";
 import JobDetail from "./components/Admin/JobDetail";
+import JobSeekerJobDetail from "./components/jobseeker/JobseekerJobDetail";
+import JobApplicationForm from "./components/jobseeker/JobApplicationForm";
+import AdminJobList from "./components/Admin/AdminJobList";
+import AppliedCandidates from "./components/employer/AppliedCandidates";
+import AdminAppliedJobs from "./components/Admin/AdminAppliedJobs";
 
 const App = () => {
   return (
@@ -54,6 +59,14 @@ const App = () => {
           }
         />
         <Route
+          path="/appliedcandidates"
+          element={
+            <ELayout>
+              <AppliedCandidates />
+            </ELayout>
+          }
+        />
+        <Route
           path="/jobs"
           element={
             <ELayout>
@@ -76,6 +89,25 @@ const App = () => {
           element={
             <Layout>
               <Home />
+            </Layout>
+          }
+        />
+        {/* User Home Route */}
+        <Route
+          path="/jobseeker/job/:id"
+          element={
+            <Layout>
+              <JobSeekerJobDetail />
+            </Layout>
+          }
+        />
+
+        {/* Job Application Route */}
+        <Route
+          path="/jobs/:id/apply"
+          element={
+            <Layout>
+              <JobApplicationForm />
             </Layout>
           }
         />
@@ -113,6 +145,24 @@ const App = () => {
             </AdminLayout>
           }
         />
+
+<Route
+          path="/adminappliedjobs"
+          element={
+            <AdminLayout>
+              <AdminAppliedJobs />
+            </AdminLayout>
+          }
+        />
+<Route
+          path="/admin/joblist"
+          element={
+            <AdminLayout>
+              <AdminJobList />
+            </AdminLayout>
+          }
+        />
+
         <Route
           path="/admin/employees"
           element={

@@ -25,6 +25,27 @@ const AdminSidebar = () => {
             Jobseekers
           </Link>
         </li>
+
+        <li>
+          <Link
+            to="/admin/joblist"
+            className="block text-white hover:text-gray-300 transition duration-300 rounded-md px-3 py-2 transform hover:scale-105"
+          >
+            Jobs
+          </Link>
+        </li>
+        
+
+        <li>
+          <Link
+            to="/adminappliedjobs"
+            className="block text-white hover:text-gray-300 transition duration-300 rounded-md px-3 py-2 transform hover:scale-105"
+          >
+            Applied Jobs
+          </Link>
+        </li>
+
+
         <li>
           <Link
             to="/pendingjobs"

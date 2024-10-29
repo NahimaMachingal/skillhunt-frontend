@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../features/auth/authSlice';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { fetchApprovedJobs } from '../../features/job/jobSlice';
 
@@ -9,10 +10,15 @@ const Home = () => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
     const approvedJobs = useSelector((state) => state.job.approvedJobs);
+    const navigate = useNavigate(); // Initialize navigate using useNavigate
 
     useEffect(() => {
         dispatch(fetchApprovedJobs());
     }, [dispatch]);
+
+    const handleDetailsClick = (jobId) => {
+        navigate(`/jobseeker/job/${jobId}`); // Use navigate to navigate to the job detail page
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-r from-blue-50 to-blue-100 p-8">
@@ -48,7 +54,7 @@ const Home = () => {
                             </p>
                         </div>
                         <div className="flex justify-end">
-                            <button className="text-blue-600 font-semibold hover:text-blue-800 transition-colors">
+                            <button onClick={() => handleDetailsClick(job.id)} className="text-blue-600 font-semibold hover:text-blue-800 transition-colors">
                                 Details
                             </button>
                         </div>
