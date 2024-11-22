@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const EmployeeSidebar = () => {
   return (
-    <div className="bg-gradient-to-b from-gray-700 to-gray-500 p-6 shadow-lg">
+    <div className="bg-gradient-to-b from-gray-700 to-gray-500 p-6 shadow-lg min-h-screen">
       <div className="text-white text-3xl font-bold mb-8 text-center">
         SKILLHUNT EMPLOYEE
       </div>

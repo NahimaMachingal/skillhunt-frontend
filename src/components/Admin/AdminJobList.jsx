@@ -12,10 +12,10 @@ const AdminJobList = () => {
   const jobsPerPage = 10;
 
   useEffect(() => {
-    if (status === 'idle') {
+    
       dispatch(fetchAdminJobs());
-    }
-  }, [dispatch, status]);
+    
+  }, [dispatch]);
 
   // Calculate the current jobs to display based on the current page
   const startIndex = currentPage * jobsPerPage;

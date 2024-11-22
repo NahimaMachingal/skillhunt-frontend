@@ -1,20 +1,77 @@
 // src/components/Auth/Login.jsx
-import React, { useState } from 'react';
+
+import React, {  useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../features/auth/authApi';
 import { useNavigate } from 'react-router-dom';
+import { googleLogin } from '../../features/auth/authApi'; 
+import { Formik, Field, Form, ErrorMessage } from 'formik'
+import * as Yup from 'yup';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userType, setUserType] = useState('jobseeker'); // Added userType state
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+ 
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const validationSchema = Yup.object({
+
+    email: Yup.string()
+     .email('Invalid email address')
+     .required('Email is required'),
+    password: Yup.string()
+     .min(6, 'Password must be at least 6 characters')
+     .required('Password is required'),
+  })
+
+  const handleGoogleLogin = async (response) => {
+    const token = response.credential;
+    
     try {
-      const resultAction = await dispatch(loginUser({ email, password }));
+      const resultAction = await dispatch(googleLogin({ token, user_type: userType }));
+      // Log the entire resultAction for debugging
+    console.log('Full Google Login Result:', resultAction);
+
+
+      if (resultAction.error) {
+        // Log the specific error details
+      console.error('Detailed Error:', resultAction.error);
+
+      
+        // More specific error handling
+        if (resultAction.error.status === 403) {
+          setError('You need to register first to login');
+        } else {
+          setError('Google login failed. Please try again.');
+        }
+      } else {
+        // Existing login success logic remains the same
+        if (resultAction.user_type) {
+          if (resultAction.user_type === 'jobseeker') {
+            navigate('/home');
+          } else if (resultAction.user_type === 'employee') {
+            navigate('/ehome');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error during  login:', error);
+      setError('You need to register first to login.');
+    }
+  };
+  
+  
+  
+
+  
+  const handleLogin = async (values) => {
+    const { email, password } = values;
+
+    try {
+      const resultAction = await dispatch(loginUser({ email, password, user_type: userType })); // Include user_type in the login request
   
       // Check if login was successful
       if (resultAction.user_type) { // Check for the presence of user_type
@@ -27,17 +84,28 @@ const Login = () => {
           navigate('/home'); // Redirect to User Home
         } else if (userType === 'employee') {
           navigate('/ehome'); // Redirect to Employee Home
-
         }
       } else {
         setError('Incorrect username or password');
       }
     } catch (error) {
       console.error('Error during login:', error);
-      setError('Incorrect username or password');
-  
+      setError('User is not verified');
     }
   };
+
+  React.useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleGoogleLogin,
+    });
+
+    google.accounts.id.renderButton(document.getElementById('google-button'), {
+      theme: 'outline',
+      size: 'large',
+    });
+  }, []);
 
   const handleRegisterRedirect = () => {
     navigate('/register');
@@ -48,48 +116,49 @@ const Login = () => {
       <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden w-11/12 md:w-3/4 lg:w-2/3">
         {/* Left Section - Login Form */}
         <div className="w-full md:w-1/2 p-8">
-        <h2 className="text-3xl text-center text-cyan-800 font-bold mb-6 
+          <h2 className="text-3xl text-center text-cyan-800 font-bold mb-6 
    bg-gradient-to-r from-gray-800 to-emerald-600 
    bg-clip-text text-transparent shadow-lg">
    Login For SkillHunt
-</h2>
-          <form onSubmit={handleLogin}>
-            <div className="mb-4">
-              <input
-                type="email"
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="password"
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {error && (
-              <div className="text-red-500 text-center mb-4">
-                {error}
+          </h2>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            validationSchema={validationSchema}
+            onSubmit={handleLogin}
+          >
+          <Form>
+              <div className="mb-4">
+                <Field
+                  type="email"
+                  name="email"
+                  className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="Email Address"
+                />
+                <ErrorMessage name="email" component="p" className="text-red-500 text-sm mt-1" />
               </div>
-            )}
+
+              <div className="mb-4">
+                <Field
+                  type="password"
+                  name="password"
+                  className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="Password"
+                />
+                <ErrorMessage name="password" component="p" className="text-red-500 text-sm mt-1" />
+              </div>
+
             <div className="flex justify-between items-center mb-4">
               <div>
                 <input type="checkbox" id="rememberMe" className="mr-2"/>
                 <label htmlFor="rememberMe">Remember me</label>
               </div>
-              <a href="#" className="text-purple-500 hover:underline">Forgot Password?</a>
+              <a href="/forgotpassword" className="text-purple-500 hover:underline">Forgot Password?</a>
             </div>
             <button type="submit" className="w-full p-3 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-300">
               Login
             </button>
-          </form>
+          </Form>
+          </Formik>
           <div className="mt-4 text-center">
             <p>
               Don't have an account?{' '}
@@ -107,8 +176,7 @@ const Login = () => {
             <hr className="border-gray-300 w-1/3"/>
           </div>
           <div className="flex justify-center space-x-4 mt-4">
-            <button className="p-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300">Google</button>
-            <button className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300">Facebook</button>
+          <div id="google-button"></div>
           </div>
         </div>
         {/* Right Section - Illustration */}

@@ -2,34 +2,61 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Formik, Field, Form, ErrorMessage } from 'formik'
+import * as Yup from 'yup';
+
 
 const Register = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    username: '',
-    first_name: '',
-    last_name: '',
-    password: '',
-    confirm_password: '',
-    user_type: 'jobseeker', // Default user type
-  });
+  
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  
 
+  const validationSchema = Yup.object({
+    email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
+  
+    username: Yup.string()
+    .required('Username is required'),
+    
+    first_name: Yup.string()
+    .required('First name is required'),
+    
+    last_name: Yup.string()
+    .required('Last name is required'),
+    
+    password: Yup.string()
+    .required('Password is required')
+    .min(6, 'Password must be at least 6 characters'),
+    
+    confirm_password: Yup.string()
+    .required('Confirm password is required')
+    .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    
+    user_type: Yup.string()
+    .required('User type is required'),
+
+
+
+  })
+
+
+
+
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirm_password) {
-      alert("Passwords do not match");
-      return;
-    }
+    
     try {
       await axios.post('http://localhost:8000/api/register/', formData);
-      navigate('/');
+      localStorage.setItem('email', formData.email); // Save email in localStorage
+      navigate('/verify-otp');
     } catch (error) {
       console.error('Registration failed:', error);
+      setErrors({ api: 'Registration failed. Please try again.' });
     }
   };
 
@@ -47,91 +74,111 @@ const Register = () => {
    bg-clip-text text-transparent shadow-lg">
    Register For SkillHunt
 </h2>
-          <form onSubmit={handleSubmit}>
+
+          <Formik
+            initialValues={{ email: '',username: '', first_name: '', last_name: '', password: '', confirm_password: '', user_type: 'jobseeker',}}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+
+          <Form >
             <div className="mb-4">
-              <input
+              <Field
                 type="email"
                 name="email"
                 className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-                required
+                
+                
+                
               />
-            </div>
+              <ErrorMessage name="email" component="p" className="text-red-500 text-sm mt-1" />
+</div>
+            
             <div className="mb-4">
-              <input
+              <Field
                 type="text"
                 name="username"
                 className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Username"
-                value={formData.username}
-                onChange={handleChange}
-                required
+                
+                
+                
               />
+              <ErrorMessage name="username" component="p" className="text-red-500 text-sm mt-1" />
+
             </div>
             <div className="mb-4">
-              <input
+              <Field
                 type="text"
                 name="first_name"
                 className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="First Name"
-                value={formData.first_name}
-                onChange={handleChange}
-                required
+                
+                
               />
-            </div>
+              <ErrorMessage name="first_name" component="p" className="text-red-500 text-sm mt-1" />
+
+            
+            
             <div className="mb-4">
-              <input
+            </div>
+              <Field
                 type="text"
                 name="last_name"
                 className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Last Name"
-                value={formData.last_name}
-                onChange={handleChange}
-                required
+                
+                
+                
               />
-            </div>
+              <ErrorMessage name="last_name" component="p" className="text-red-500 text-sm mt-1" />
             <div className="mb-4">
-              <input
+              </div>
+              <Field
                 type="password"
                 name="password"
                 className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                required
+                
+                
+                
               />
+              <ErrorMessage name="password" component="p" className="text-red-500 text-sm mt-1" />
             </div>
             <div className="mb-4">
-              <input
+              <Field
                 type="password"
                 name="confirm_password"
                 className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Confirm Password"
-                value={formData.confirm_password}
-                onChange={handleChange}
-                required
+                
+                
+                
               />
-            </div>
+              <ErrorMessage name="confirm_password" component="p" className="text-red-500 text-sm mt-1" />
+</div>
+            
             
 
             <div className="mb-4">
               <select
                 name="user_type"
                 className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-                value={formData.user_type}
-                onChange={handleChange}
-                required
+                
+                
+                
               >
                 <option value="jobseeker">Jobseeker</option>
                 <option value="employee">Employee</option>
               </select>
+              <ErrorMessage name="user_type" component="p" className="text-red-500 text-sm mt-1" />
             </div>
             <button type="submit" className="w-full p-3 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-300">
               Register
             </button>
-          </form>
+          </Form>
+          </Formik>
 
           {/* Already have an account? Link */}
           <div className="mt-4 text-center">

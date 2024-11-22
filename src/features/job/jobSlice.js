@@ -15,7 +15,7 @@ export const postJob = createAsyncThunk('job/postJob', async (jobData, { rejectW
         });
         return response.data;
     } catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(error.response.data || error.message);
     }
 });
 
@@ -204,7 +204,8 @@ const jobSlice = createSlice({
             })
             .addCase(postJob.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.payload; // Set the error
+                state.error = action.error.message || action.payload || 'An unknown error occurred'; // Set the error
+                console.error('Job posting failed:', action.error);
             })
 
             .addCase(fetchJobs.pending, (state) => {

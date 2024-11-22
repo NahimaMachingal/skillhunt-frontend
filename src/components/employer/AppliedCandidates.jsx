@@ -20,10 +20,16 @@ const AppliedCandidates = () => {
     if (loading) return <p className="text-center text-lg">Loading...</p>;
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
+
+    // Sort appliedCandidates by 'applied_at' in descending order
+    const sortedCandidates = [...appliedCandidates].sort(
+        (a, b) => new Date(b.applied_at) - new Date(a.applied_at)
+    );
+
     return (
         <div className="container mx-auto px-4 py-8">
             <h2 className="text-2xl font-bold mb-4 text-center">Applied Candidates</h2>
-            {appliedCandidates.length > 0 ? (
+            {sortedCandidates.length > 0 ? (
                 <div className="overflow-x-auto">
                     <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
                         <thead>
@@ -33,12 +39,15 @@ const AppliedCandidates = () => {
                                 <th className="py-3 px-6 text-left">Job Title</th>
                                 <th className="py-3 px-6 text-left">Status</th>
                                 <th className="py-3 px-6 text-left">Applied At</th>
+                                <th className="py-3 px-6 text-left">Experience</th>
+                                <th className="py-3 px-6 text-left">Arabic</th>
                                 <th className="py-3 px-6 text-left">Resume</th>
                                 <th className="py-3 px-6 text-left">Cover Letter</th>
+                                
                             </tr>
                         </thead>
                         <tbody className="text-gray-600 text-sm font-light">
-                            {appliedCandidates.map((application) => (
+                            {sortedCandidates.map((application) => (
                                 <tr key={application.id} className="border-b border-gray-200 hover:bg-gray-100">
                                     <td className="py-3 px-6">{application.applicant_name}</td>
                                     <td className="py-3 px-6">{application.applicant_email}</td>
@@ -56,13 +65,21 @@ const AppliedCandidates = () => {
                                             <option value="Rejected">Rejected</option>
                                         </select>
                                     </td>
+                                    
                                     <td className="py-3 px-6">{new Date(application.applied_at).toLocaleString()}</td>
+                                    <td className="py-3 px-6">
+                                        {application.questions?.experience || 'N/A'}
+                                    </td>
+                                    <td className="py-3 px-6">
+                                        {application.questions?.arabic || 'N/A'}
+                                    </td>
                                     <td className="py-3 px-6">
                                         <a href={application.resume} className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">
                                             Download Resume
                                         </a>
                                     </td>
                                     <td className="py-3 px-6">{application.cover_letter || 'No cover letter provided'}</td>
+                                    
                                 </tr>
                             ))}
                         </tbody>

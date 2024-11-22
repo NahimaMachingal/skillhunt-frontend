@@ -26,19 +26,31 @@ import JobApplicationForm from "./components/jobseeker/JobApplicationForm";
 import AdminJobList from "./components/Admin/AdminJobList";
 import AppliedCandidates from "./components/employer/AppliedCandidates";
 import AdminAppliedJobs from "./components/Admin/AdminAppliedJobs";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import ForgotPassword from "./components/Auth/ForgotPassword";
+import ResetPassword from "./components/Auth/ResetPassword";
+import UserVerification from "./components/Admin/UserVerification";
+import VerifyOTP from "./components/Auth/VerifyOTP";
+
+
 
 const App = () => {
   return (
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      
     <Router>
       <Routes>
       <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route
           path="/ehome"
           element={
             <ELayout>
+              
               <EHome />
+              
             </ELayout>
           }
         />
@@ -147,6 +159,16 @@ const App = () => {
         />
 
 <Route
+          path="/userverification"
+          element={
+            <AdminLayout>
+              <UserVerification />
+            </AdminLayout>
+          }
+        />
+
+
+<Route
           path="/adminappliedjobs"
           element={
             <AdminLayout>
@@ -180,9 +202,28 @@ const App = () => {
             </AdminLayout>
           }
         />
+        <Route
+          path="/forgotpassword"
+          element={
+            
+              <ForgotPassword />
+            
+          }
+        />
+
+<Route
+          path="/reset-password"
+          element={
+            
+              <ResetPassword />
+            
+          }
+        />
 
       </Routes>
     </Router>
+    
+    </GoogleOAuthProvider>
   );
 };
 
