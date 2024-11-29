@@ -2,9 +2,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchJobs } from '../../features/job/jobSlice'; // Assuming you have an action to fetch jobs
+import { useNavigate } from 'react-router-dom';
 
 const Jobs = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { jobs, status, error } = useSelector((state) => state.job);
   const user = useSelector((state) => state.auth.user);
 
@@ -15,6 +17,10 @@ const Jobs = () => {
 
   // Filter jobs by the logged-in employer's ID
   const employerJobs = jobs.filter((job) => job.employer_id === user?.id);
+
+  const handleJobClick = (JobId) =>{
+    navigate(`/edit-job/${JobId}`);
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -32,7 +38,9 @@ const Jobs = () => {
               className="flex justify-between items-center p-4 bg-white shadow-md rounded-md hover:bg-gray-50"
             >
               <div>
-                <strong className="text-lg font-medium text-gray-800">
+                <strong className="text-lg font-medium text-gray-800 cursor-pointer hover:underline"
+                onClick={()=> handleJobClick(job.id)}
+                >
                   {index + 1}. {job.title}
                 </strong>
                 <p className="text-sm text-gray-500">Posted At: {new Date(job.posted_at).toLocaleDateString()}</p>

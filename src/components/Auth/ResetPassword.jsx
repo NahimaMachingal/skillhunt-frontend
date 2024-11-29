@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const ResetPassword = () => {
   const [otp, setOTP] = useState('');
@@ -13,6 +14,9 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email;
+
+  // Access the token from the Redux store
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     if (resendCooldown > 0) {
@@ -25,7 +29,9 @@ const ResetPassword = () => {
     try {
       setError('');
       setSuccess('');
-      const response = await axios.post('http://localhost:8000/api/reset-password/', { email, otp, new_password: newPassword });
+      const response = await axios.post('http://localhost:8000/api/reset-password/', { email, otp, new_password: newPassword }
+        
+      );
       setSuccess(response.data.message);
       navigate('/login');
     } catch (error) {
@@ -38,7 +44,9 @@ const ResetPassword = () => {
       setError('');
       setSuccess('');
       setResendCooldown(30);
-      await axios.post('http://localhost:8000/api/send-otp/', { email });
+      await axios.post('http://localhost:8000/api/send-otp/', { email }
+       
+      );
       setSuccess('OTP sent successfully!!');
       // Clear the success message after a few seconds
       setTimeout(() => setSuccess(''), 5000); // Clear after 5 seconds

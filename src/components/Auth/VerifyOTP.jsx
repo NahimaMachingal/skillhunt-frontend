@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const VerifyOTP = () => {
   const [otp, setOtp] = useState('');
@@ -10,6 +11,12 @@ const VerifyOTP = () => {
   const navigate = useNavigate();
   const [resendCooldown, setResendCooldown] = useState(0);
 
+
+
+  // Get email and token from Redux store
+  const email = useSelector((state) => state.auth.email) || localStorage.getItem('email');
+
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     if (resendCooldown > 0) {
@@ -21,8 +28,6 @@ const VerifyOTP = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = localStorage.getItem('email'); // Retrieve email from local storage
-
     if (!email) {
       setError('Email not found. Please register again.');
       return;
@@ -30,10 +35,10 @@ const VerifyOTP = () => {
     try {
       setError('');
       setMessage('');
-      const response = await axios.post('http://localhost:8000/api/verify-otp/', { email, otp });
+      const response = await axios.post('http://localhost:8000/api/verify-otp/', { email, otp }
+        
+      );
       setMessage(response.data.message);
-      // Clear email from local storage after successful verification
-      localStorage.removeItem('email');
       navigate('/login'); // Redirect to login after successful verification
     } catch (err) {
       setError(err.response?.data?.error || 'Verification failed');
@@ -41,7 +46,6 @@ const VerifyOTP = () => {
   };
 
   const handleResendOTP = async () => {
-    const email = localStorage.getItem('email');
     if (!email) {
         setError('Email not found. Please register again.');
         return;
@@ -50,10 +54,11 @@ const VerifyOTP = () => {
         setError('');
         setMessage('');
         setResendCooldown(30);
-        await axios.post('http://localhost:8000/api/resend-otp/', { email });
+        await axios.post('http://localhost:8000/api/resend-otp/', { email }
+          
+        );
         setMessage('OTP sent successfully!');
-        setTimeout(() => setSuccess(''), 5000);
-    } catch (error) {
+        } catch (error) {
         setError(error.response?.data?.error || 'Failed to resend OTP. Please try again.');
         setResendCooldown(0);
     }

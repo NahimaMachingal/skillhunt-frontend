@@ -15,8 +15,8 @@ import EmployeeList from "./components/Admin/EmployeeList";
 import JobseekerProfile from "./components/jobseeker/JobseekerProfile";
 import JProfileEdit from "./components/jobseeker/JProfileEdit";
 import EHome from "./components/Auth/EHome";
-import EmployerProfile from "./components/Employer/EmployerProfile";
-import EProfileEdit from "./components/Employer/EProfileEdit";
+import EmployerProfile from "./components/employer/EmployerProfile";
+import EProfileEdit from "./components/employer/EProfileEdit";
 import PostJob from "./components/employer/PostJob";
 import Jobs from "./components/employer/Jobs";
 import PendingJobs from "./components/Admin/PendingJobs";
@@ -31,8 +31,10 @@ import ForgotPassword from "./components/Auth/ForgotPassword";
 import ResetPassword from "./components/Auth/ResetPassword";
 import UserVerification from "./components/Admin/UserVerification";
 import VerifyOTP from "./components/Auth/VerifyOTP";
-
-
+import EditJobDetail from "./components/employer/EditJobDetail";
+import ApplicantsForJob from "./components/employer/ApplicantsForJob";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
@@ -78,6 +80,16 @@ const App = () => {
             </ELayout>
           }
         />
+
+<Route
+          path="/job/:jobId/applicants"
+          element={
+            <ELayout>
+              <ApplicantsForJob />
+            </ELayout>
+          }
+        />
+
         <Route
           path="/jobs"
           element={
@@ -86,6 +98,13 @@ const App = () => {
             </ELayout>
           }
         />
+        <Route
+         path="/edit-job/:id" 
+         element={
+           <ELayout>
+             <EditJobDetail />
+           </ELayout>
+         } /> 
         <Route
           path="/employer/eprofileedit"
           element={
@@ -219,10 +238,11 @@ const App = () => {
             
           }
         />
+        
 
       </Routes>
     </Router>
-    
+    <ToastContainer />
     </GoogleOAuthProvider>
   );
 };

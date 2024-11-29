@@ -6,10 +6,12 @@ const API_URL = 'http://localhost:8000/api/eprofile/';
 
 // Thunk for fetching the profile
 export const fetchProfile = createAsyncThunk('profile/fetchProfile', async (_, thunkAPI) => {
+  const state = thunkAPI.getState(); // Access the Redux state
+  const token = state.auth?.accessToken; // Replace with the actual location of the token in your state
   try {
     const response = await axios.get(API_URL, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
@@ -20,10 +22,12 @@ export const fetchProfile = createAsyncThunk('profile/fetchProfile', async (_, t
 
 // Add a new thunk for updating the profile
 export const updateProfile = createAsyncThunk('eprofile/updateProfile', async (updatedData, thunkAPI) => {
+  const state = thunkAPI.getState(); // Access the Redux state
+  const token = state.auth?.accessToken;
   try {
     const response = await axios.put(API_URL, updatedData, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
       },
     });

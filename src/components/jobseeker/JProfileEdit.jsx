@@ -171,10 +171,7 @@ const JProfileEdit = () => {
               className="border p-2 w-full"
             />
           </div>
-          <div className="col-span-1">
-            <label>Resume:</label>
-            <input type="file" name="resume" onChange={handleFileChange} className="border p-2 w-full" />
-          </div>
+          
           <div className="col-span-2">
             <label>Visible Applications:</label>
             <div>

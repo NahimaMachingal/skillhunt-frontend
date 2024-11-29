@@ -1,18 +1,25 @@
 //src/components/Admin/UserVerification.jsx
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 const UserVerification = () => {
   const [unverifiedUsers, setUnverifiedUsers] = useState([]);
 
+
+    // Access the token from the Redux store
+  const accessToken = useSelector((state) => state.auth.accessToken);
+
   useEffect(() => {
     const fetchUnverifiedUsers = async () => {
       try {
-        const token = localStorage.getItem('accessToken'); // Get the access token
+        if (!accessToken) return;
         const response = await axios.get('http://localhost:8000/api/unverified-users/', {
+
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the headers
+            Authorization: `Bearer ${accessToken}`, // Include the token in the headers
           },
+          
         });
         setUnverifiedUsers(response.data);
       } catch (error) {
@@ -21,14 +28,14 @@ const UserVerification = () => {
     };
 
     fetchUnverifiedUsers(); // Call the fetch function
-  }, []); // Run only once when the component mounts
+  }, [accessToken]); // Run only once when the component mounts
 
   const handleVerify = async (userId) => {
     try {
-      const token = localStorage.getItem('accessToken'); // Get the access token
+      if (!accessToken) return;
       await axios.post(`http://localhost:8000/api/verify-user/${userId}/`, {}, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the headers
+          Authorization: `Bearer ${accessToken}`, // Include the token in the headers
         },
       });
       setUnverifiedUsers(unverifiedUsers.filter(user => user.id !== userId));

@@ -47,12 +47,10 @@ const Register = () => {
 
 
   
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async (values) => {
     try {
-      await axios.post('http://localhost:8000/api/register/', formData);
-      localStorage.setItem('email', formData.email); // Save email in localStorage
+      await axios.post('http://localhost:8000/api/register/', values);
+      localStorage.setItem('email', values.email); // Save email in localStorage
       navigate('/verify-otp');
     } catch (error) {
       console.error('Registration failed:', error);

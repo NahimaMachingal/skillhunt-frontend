@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+
+
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -12,6 +15,8 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
 
 
+  // Get the token from the Redux store
+  const token = useSelector((state) => state.auth.accessToken);
 
   
   const handleSendOTP = async () => {

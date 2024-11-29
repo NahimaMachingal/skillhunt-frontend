@@ -11,11 +11,8 @@ const Navbar = () => {
   const [settingsOpen, setSettingsOpen] = useState(false); // State to toggle dropdown
 
   const handleLogout = () => {
-    // Dispatch the logout action
-    // Clear token from localStorage
-    localStorage.removeItem('accessToken');
+    
     dispatch(logoutUser());
-    // Redirect to the login page
     navigate('/login');
   };
   const toggleSettings = () => {

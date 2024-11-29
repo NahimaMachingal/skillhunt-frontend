@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { googleLogin } from '../../features/auth/authApi'; 
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -16,6 +17,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
  
+  // Access token and user info from the Redux store
+  const { token, userType: storeUserType } = useSelector((state) => state.auth);
 
   const validationSchema = Yup.object({
 
@@ -32,10 +35,6 @@ const Login = () => {
     
     try {
       const resultAction = await dispatch(googleLogin({ token, user_type: userType }));
-      // Log the entire resultAction for debugging
-    console.log('Full Google Login Result:', resultAction);
-
-
       if (resultAction.error) {
         // Log the specific error details
       console.error('Detailed Error:', resultAction.error);
@@ -55,8 +54,7 @@ const Login = () => {
           } else if (resultAction.user_type === 'employee') {
             navigate('/ehome');
           }
-        }
-      }
+        }}
     } catch (error) {
       console.error('Error during  login:', error);
       setError('You need to register first to login.');
@@ -71,7 +69,7 @@ const Login = () => {
     const { email, password } = values;
 
     try {
-      const resultAction = await dispatch(loginUser({ email, password, user_type: userType })); // Include user_type in the login request
+      const resultAction = await dispatch(loginUser({ email, password,  user_type: userType})); // Include user_type in the login request
   
       // Check if login was successful
       if (resultAction.user_type) { // Check for the presence of user_type

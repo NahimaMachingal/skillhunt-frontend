@@ -5,11 +5,13 @@ import axios from 'axios';
 const API_URL = 'http://localhost:8000/api/job/'; // Update API_URL for consistency
 
 // Thunk for posting a job
-export const postJob = createAsyncThunk('job/postJob', async (jobData, { rejectWithValue }) => {
+export const postJob = createAsyncThunk('job/postJob', async (jobData, { getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.post(`${API_URL}post/`, jobData, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json', // Ensure correct content type
             },
         });
@@ -20,11 +22,13 @@ export const postJob = createAsyncThunk('job/postJob', async (jobData, { rejectW
 });
 
 // Thunk for fetching jobs
-export const fetchJobs = createAsyncThunk('job/fetchJobs', async (_, { rejectWithValue }) => {
+export const fetchJobs = createAsyncThunk('job/fetchJobs', async (_, {getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.get(`${API_URL}jobs/`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
         return response.data;
@@ -34,11 +38,13 @@ export const fetchJobs = createAsyncThunk('job/fetchJobs', async (_, { rejectWit
 });
 
 // Add this thunk for fetching pending jobs
-export const fetchPendingJobs = createAsyncThunk('job/fetchPendingJobs', async (_, { rejectWithValue }) => {
+export const fetchPendingJobs = createAsyncThunk('job/fetchPendingJobs', async (_, { getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.get(`${API_URL}pending-jobs/`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
         return response.data;
@@ -48,11 +54,13 @@ export const fetchPendingJobs = createAsyncThunk('job/fetchPendingJobs', async (
 });
 
 // Thunk for fetching a single job by ID
-export const fetchJobById = createAsyncThunk('job/fetchJobById', async (jobId, { rejectWithValue }) => {
+export const fetchJobById = createAsyncThunk('job/fetchJobById', async (jobId, {getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.get(`${API_URL}job/${jobId}/`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
         return response.data;
@@ -61,11 +69,59 @@ export const fetchJobById = createAsyncThunk('job/fetchJobById', async (jobId, {
     }
 });
 
-export const approveJob = createAsyncThunk('job/approveJob', async (jobId, { rejectWithValue }) => {
+
+
+
+// Update job
+export const updateJob = createAsyncThunk(
+    'job/updateJob',
+    async ({ id, ...jobData }, { getState, rejectWithValue }) => {
+      try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
+        const response = await axios.put(`${API_URL}updatejob/${id}/`, jobData, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        return response.data; // Return updated job details from the API response
+      } catch (error) {
+        // Handle cases where no response data exists
+        const errorMessage = error.response?.data || 'An error occurred while updating the job.';
+        return rejectWithValue(errorMessage);
+      }
+    }
+  );
+
+  // Add this in jobSlice.js
+export const deleteJob = createAsyncThunk(
+    'job/deleteJob',
+    async (id, { getState, rejectWithValue }) => {
+      try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
+        const response = await axios.delete(`${API_URL}updatejob/${id}/`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        return response.data; // Return success response
+      } catch (error) {
+        const errorMessage = error.response?.data || 'An error occurred while deleting the job.';
+        return rejectWithValue(errorMessage);
+      }
+    }
+  );
+  
+  
+
+export const approveJob = createAsyncThunk('job/approveJob', async (jobId, { getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.post(`${API_URL}job/approve/${jobId}/`, {}, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -76,11 +132,13 @@ export const approveJob = createAsyncThunk('job/approveJob', async (jobId, { rej
 });
 
 // Thunk for fetching approved jobs
-export const fetchApprovedJobs = createAsyncThunk('job/fetchApprovedJobs', async (_, { rejectWithValue }) => {
+export const fetchApprovedJobs = createAsyncThunk('job/fetchApprovedJobs', async (_, {getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.get(`${API_URL}approved-jobs/`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
         return response.data;
@@ -89,11 +147,13 @@ export const fetchApprovedJobs = createAsyncThunk('job/fetchApprovedJobs', async
     }
 });
 
-export const fetchJobSeekerJobById = createAsyncThunk('job/fetchJobSeekerJobById', async (jobId, { rejectWithValue }) => {
+export const fetchJobSeekerJobById = createAsyncThunk('job/fetchJobSeekerJobById', async (jobId, { getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.get(`${API_URL}job/jobseeker/${jobId}/`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
         return response.data;
@@ -102,11 +162,13 @@ export const fetchJobSeekerJobById = createAsyncThunk('job/fetchJobSeekerJobById
     }
 });
 
-export const submitJobApplication = createAsyncThunk('job/submitJobApplication', async (applicationData, { rejectWithValue }) => {
+export const submitJobApplication = createAsyncThunk('job/submitJobApplication', async (applicationData, { getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.post(`${API_URL}apply/`, applicationData, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
                 
             },
         });
@@ -117,11 +179,13 @@ export const submitJobApplication = createAsyncThunk('job/submitJobApplication',
 });
 
 // Thunk for fetching all jobs (Admin)
-export const fetchAdminJobs = createAsyncThunk('adminJob/fetchAdminJobs', async (_, { rejectWithValue }) => {
+export const fetchAdminJobs = createAsyncThunk('adminJob/fetchAdminJobs', async (_, {getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.get(`${API_URL}admin/jobs/`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
         return response.data;
@@ -131,11 +195,13 @@ export const fetchAdminJobs = createAsyncThunk('adminJob/fetchAdminJobs', async 
 });
 
 // Add this thunk for fetching applied candidates
-export const fetchAppliedCandidates = createAsyncThunk('job/fetchAppliedCandidates', async (_, { rejectWithValue }) => {
+export const fetchAppliedCandidates = createAsyncThunk('job/fetchAppliedCandidates', async (_, {getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.get(`${API_URL}applied-candidates/`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
         return response.data;
@@ -145,11 +211,13 @@ export const fetchAppliedCandidates = createAsyncThunk('job/fetchAppliedCandidat
 });
 
 // Thunk for updating the application status
-export const updateApplicationStatus = createAsyncThunk('job/updateApplicationStatus', async ({ applicationId, status }, { rejectWithValue }) => {
+export const updateApplicationStatus = createAsyncThunk('job/updateApplicationStatus', async ({ applicationId, status }, { getState, rejectWithValue }) => {
     try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
         const response = await axios.patch(`${API_URL}application/${applicationId}/`, { status }, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
         return response.data;
@@ -158,13 +226,34 @@ export const updateApplicationStatus = createAsyncThunk('job/updateApplicationSt
     }
 });
 
+export const fetchApplicantsForJob = createAsyncThunk(
+    "job/fetchApplicantsForJob",
+    async (jobId, { getState, rejectWithValue }) => {
+      try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
+        const response = await axios.get(`${API_URL}job/${jobId}/applicants/`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  );
+  
+
 export const fetchAdminApplications = createAsyncThunk(
     'job/fetchAdminApplications',
-    async (_, { rejectWithValue }) => {
+    async (_, { getState, rejectWithValue }) => {
         try {
+            const state = getState();
+        const accessToken = state.auth.accessToken;
             const response = await axios.get(`${API_URL}admin/applications/`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    Authorization: `Bearer ${accessToken}`,
                 },
             });
             return response.data;
@@ -183,6 +272,7 @@ const jobSlice = createSlice({
         approvedJobs: [], // Add this state to hold approved jobs
         pendingJobs: [],
         appliedCandidates: [],
+        applicantsForJob: [],
         adminApplications: [],
         adminJobs: [],
         job: null,
@@ -248,6 +338,21 @@ const jobSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.payload;
             })
+
+            // Fetch Job by ID Cases
+            .addCase(updateJob.pending, (state) => {
+                state.status = 'loading';
+                state.error = null;
+            })
+            .addCase(updateJob.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.job = action.payload; // Set the job details in the state
+            })
+            .addCase(updateJob.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+
             // Add this thunk to the extraReducers in the jobSlice
             .addCase(approveJob.pending, (state) => {
                 state.status = 'loading';
@@ -323,12 +428,25 @@ const jobSlice = createSlice({
             })
 
             .addCase(updateApplicationStatus.fulfilled, (state, action) => {
-                const index = state.appliedCandidates.findIndex((app) => app.id === action.payload.id);
+                const index = state.applicantsForJob.findIndex((app) => app.id === action.payload.id);
                 if (index !== -1) {
-                    state.appliedCandidates[index].status = action.payload.status;
+                    state.applicantsForJob[index].status = action.payload.status;
                 }
             })
             .addCase(updateApplicationStatus.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+
+            .addCase(fetchApplicantsForJob.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchApplicantsForJob.fulfilled, (state, action) => {
+                state.loading = false;
+                state.applicantsForJob = action.payload; // Correctly set the applicantsForJob state
+            })
+            .addCase(fetchApplicantsForJob.rejected, (state, action) => {
+                state.loading = false;
                 state.error = action.payload;
             })
 

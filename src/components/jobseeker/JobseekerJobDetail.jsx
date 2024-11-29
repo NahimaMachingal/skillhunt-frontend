@@ -71,9 +71,12 @@ const JobSeekerJobDetail = () => {
                 <div className="col-span-2 bg-white p-6 rounded-lg shadow-lg">
 
                     {/* Approve Button */}
-            <div className="flex justify-end mt-8">
+            <div className="flex justify-end mt-8 space-x-4">
                 <button onClick={handleApplyClick} className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-green-600 transition duration-200 ease-in-out">
                     Apply Job
+                </button>
+                <button className='bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-blue-600 transition duration-200 ease-in-out'>
+                    Message
                 </button>
             </div>
                     <h3 className="text-xl font-semibold text-blue-600 mb-4">Job Responsibilities</h3>
