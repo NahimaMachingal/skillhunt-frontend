@@ -1,4 +1,4 @@
-// src/components/Admin/AdminLayout.jsx
+// src/components/Auth/Layout.jsx
 import React from 'react';
 import Navbar from './Navbar';
 

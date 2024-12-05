@@ -380,14 +380,17 @@ const jobSlice = createSlice({
 
             // Fetch JobSeeker Job by ID Cases
             .addCase(fetchJobSeekerJobById.pending, (state) => {
+                console.log('Fetching job...');
                 state.status = 'loading';
                 state.error = null;
             })
             .addCase(fetchJobSeekerJobById.fulfilled, (state, action) => {
+                console.log("Job details fetched:", action.payload);
                 state.status = 'succeeded';
                 state.job = action.payload; // Set the job details in the state for jobseeker
             })
             .addCase(fetchJobSeekerJobById.rejected, (state, action) => {
+                console.log('Failed to fetch job:', action.payload);
                 state.status = 'failed';
                 state.error = action.payload;
             })

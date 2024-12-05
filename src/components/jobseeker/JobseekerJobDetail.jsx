@@ -5,15 +5,22 @@ import { fetchJobSeekerJobById } from '../../features/job/jobSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
+
 const JobSeekerJobDetail = () => {
     const { id } = useParams(); // Get the job ID from the URL
     const dispatch = useDispatch();
     const navigate = useNavigate(); // Initialize navigate
     const { job, status, error } = useSelector((state) => state.job);
+    const { conversations, error: chatError } = useSelector((state) => state.chat);
+
 
     useEffect(() => {
         dispatch(fetchJobSeekerJobById(id)); // Fetch the job details
     }, [dispatch, id]);
+
+    useEffect(() => {
+        console.log('Job data:', job);  // Log the fetched job data
+    }, [job]);
 
     if (status === 'loading') {
         return <p className="text-lg text-gray-500">Loading...</p>;
@@ -30,6 +37,8 @@ const JobSeekerJobDetail = () => {
     const handleApplyClick = () => {
         navigate(`/jobs/${id}/apply`);
     };
+
+    
 
     return (
         <div className="container mx-auto p-6">
@@ -75,7 +84,8 @@ const JobSeekerJobDetail = () => {
                 <button onClick={handleApplyClick} className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-green-600 transition duration-200 ease-in-out">
                     Apply Job
                 </button>
-                <button className='bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-blue-600 transition duration-200 ease-in-out'>
+                <button
+                className='bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-blue-600 transition duration-200 ease-in-out'>
                     Message
                 </button>
             </div>

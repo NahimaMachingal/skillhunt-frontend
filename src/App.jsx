@@ -35,6 +35,7 @@ import EditJobDetail from "./components/employer/EditJobDetail";
 import ApplicantsForJob from "./components/employer/ApplicantsForJob";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Chat from "./components/jobseeker/Chat";
 
 const App = () => {
   return (
@@ -151,6 +152,16 @@ const App = () => {
             </Layout>
           }
         />
+    <Route
+          path="/chat"
+          element={
+            
+              <Chat />
+            
+          }
+        />
+
+
         <Route
           path="/jobseeker/jprofileedit"
           element={
@@ -159,6 +170,9 @@ const App = () => {
             </Layout>
           }
         />
+        
+
+
         {/* Admin Routes */}
         <Route
           path="/admin/home"
