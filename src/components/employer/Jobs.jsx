@@ -16,7 +16,7 @@ const Jobs = () => {
   }, [dispatch]);
 
   // Filter jobs by the logged-in employer's ID
-  const employerJobs = jobs.filter((job) => job.employer_id === user?.id);
+  const employerJobs = jobs.filter((job) => job.employer_id === user?.id && job.is_active === true);
 
   const handleJobClick = (JobId) =>{
     navigate(`/edit-job/${JobId}`);

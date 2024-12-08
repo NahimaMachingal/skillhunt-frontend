@@ -42,11 +42,11 @@ export const refreshAccessToken = async (dispatch, getState) => {
 export const googleLogin = (data) => async (dispatch) => {
   try {
     const response = await axios.post(`${API_URL}google-login/`, data);
-    const { user, user_type, access, refresh } = response.data;
+    const { user_type, access, refresh } = response.data;
 
     dispatch(loginSuccess({ user: user_type, access, refresh }));
     
-    return { user_type, user };
+    return { user_type };
   } catch (error) {
     console.error('Google login failed:', error);
     throw new Error('Google login failed');
@@ -56,12 +56,12 @@ export const googleLogin = (data) => async (dispatch) => {
 export const loginUser = (credentials) => async (dispatch) => {
   try {
     const response = await axios.post(`${API_URL}login/`, credentials);
-    const { user, user_type, access, refresh } = response.data;
+    const { user_type, access, refresh } = response.data;
 
     
     dispatch(loginSuccess({ user: user_type, access, refresh }));
     
-    return { user_type, user};
+    return { user_type};
   } catch (error) {
     console.error('Login failed:', error);
     throw new Error('Login failed');

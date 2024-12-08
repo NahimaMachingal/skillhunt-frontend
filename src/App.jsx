@@ -36,6 +36,8 @@ import ApplicantsForJob from "./components/employer/ApplicantsForJob";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Chat from "./components/jobseeker/Chat";
+import EmployerChat from "./components/employer/EmployerChat";
+import Dashboard from "./components/jobseeker/Dashboard";
 
 const App = () => {
   return (
@@ -82,6 +84,14 @@ const App = () => {
           }
         />
 
+<Route
+          path="/employerchat"
+          element={
+            <ELayout>
+              <EmployerChat />
+            </ELayout>
+          }
+        />
 <Route
           path="/job/:jobId/applicants"
           element={
@@ -140,6 +150,15 @@ const App = () => {
           element={
             <Layout>
               <JobApplicationForm />
+            </Layout>
+          }
+        />
+        {/* Job Application Route */}
+        <Route
+          path="/dashboard"
+          element={
+            <Layout>
+              <Dashboard />
             </Layout>
           }
         />

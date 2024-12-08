@@ -23,10 +23,11 @@ const AppliedCandidates = () => {
   const handleJobClick = (jobId) => {
     navigate(`/job/${jobId}/applicants`);
   };
-
+// Filter out jobs that are inactive (is_active is false)
+const activeAppliedCandidates = appliedCandidates.filter((job) => job.is_active === true);
   // Extract unique job titles
-  const uniqueJobTitles = appliedCandidates.length
-    ? [...new Map(appliedCandidates.map((job) => [job?.job_title, job])).values()]
+  const uniqueJobTitles = activeAppliedCandidates.length
+    ? [...new Map(activeAppliedCandidates.map((job) => [job?.job_title, job])).values()]
     : [];
 
   if (loading) return <p className="text-center text-lg text-gray-500">Loading...</p>;

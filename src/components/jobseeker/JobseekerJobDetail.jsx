@@ -1,28 +1,64 @@
 // src/components/JobSeekerJobDetail.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchJobSeekerJobById } from '../../features/job/jobSlice';
+import { fetchJobSeekerJobById, checkIfApplied} from '../../features/job/jobSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-
-
+import { getOrCreateChatRoom } from '../../features/chat/chatSlice';
+import { fetchProfile } from '../../features/jobseekerprofile/jobseekerProfileSlice';
 
 const JobSeekerJobDetail = () => {
     const { id } = useParams(); // Get the job ID from the URL
     const dispatch = useDispatch();
     const navigate = useNavigate(); // Initialize navigate
-    const { job, status, error } = useSelector((state) => state.job);
+    const { job, status, error, isApplied } = useSelector((state) => state.job);
+    console.log("job details", job)
     const { conversations, error: chatError } = useSelector((state) => state.chat);
-
+    const { data } = useSelector((state) => state.profile);
+    
 
     useEffect(() => {
         dispatch(fetchJobSeekerJobById(id)); // Fetch the job details
+        dispatch(checkIfApplied(id));
     }, [dispatch, id]);
 
     useEffect(() => {
-        console.log('Job data:', job);  // Log the fetched job data
-    }, [job]);
+        dispatch(fetchProfile());
+      }, [dispatch]);
 
-    if (status === 'loading') {
+
+    
+    
+
+    const handleApplyClick = () => {
+        navigate(`/jobs/${id}/apply`);
+    };
+
+    const handleMessageClick = async () => {
+        try {
+            const jobseekerId = data?.user?.id;
+            const room = conversations?.find((conversation) => conversation.job?.id === job.id);
+            console.log("jj = ",jobseekerId);
+
+
+            const employerId =job.employer_user_id;
+            console.log("kk = ",employerId);
+          const chatRoom = await dispatch(
+            getOrCreateChatRoom({ jobseekerId, employerId})
+          ).unwrap();
+          console.log("new chat room Jobseeker id is", jobseekerId)
+          console.log("new chat room employer id is", employerId)
+    
+          if (chatRoom) {
+            
+            navigate('/chat'); // Redirect to Chat Page
+          }
+        } catch (error) {
+          console.error('Failed to create or get chat room:', error);
+          alert('Unable to initiate chat. Please try again.');
+        }
+      };
+
+      if (status === 'loading') {
         return <p className="text-lg text-gray-500">Loading...</p>;
     }
 
@@ -34,12 +70,7 @@ const JobSeekerJobDetail = () => {
         return <p className="text-lg text-gray-500">Job not found.</p>;
     }
 
-    const handleApplyClick = () => {
-        navigate(`/jobs/${id}/apply`);
-    };
-
-    
-
+      
     return (
         <div className="container mx-auto p-6">
             {/* Grid Layout */}
@@ -66,7 +97,7 @@ const JobSeekerJobDetail = () => {
                         <p className="text-gray-600">{job.experience_level}</p>
 
                         <p className="text-lg font-semibold text-gray-700 mt-4">Salary Range:</p>
-                        <p className="text-gray-600">{job.salary_min} - {job.salary_max}</p>
+                        <p className="text-gray-600">{job.salary_min} - {job.salary_max} {job.currency}</p>
 
                         <p className="text-lg font-semibold text-gray-700 mt-4">Is Remote:</p>
                         <p className="text-gray-600">{job.is_remote ? 'Yes' : 'No'}</p>
@@ -81,10 +112,16 @@ const JobSeekerJobDetail = () => {
 
                     {/* Approve Button */}
             <div className="flex justify-end mt-8 space-x-4">
-                <button onClick={handleApplyClick} className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-green-600 transition duration-200 ease-in-out">
-                    Apply Job
-                </button>
+                {/* Apply Button */}
+            <button
+                onClick={handleApplyClick}
+                disabled={isApplied}
+                className={`px-6 py-3 rounded-lg ${isApplied ? 'bg-gray-400' : 'bg-green-500'} text-white`}
+            >
+                {isApplied ? 'Applied' : 'Apply'}
+            </button>
                 <button
+                onClick={handleMessageClick}
                 className='bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-blue-600 transition duration-200 ease-in-out'>
                     Message
                 </button>

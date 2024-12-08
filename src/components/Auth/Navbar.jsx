@@ -31,6 +31,9 @@ const Navbar = () => {
           <Link to="/home" className="text-white hover:text-gray-200">
             Jobseeker Home
           </Link>
+          <Link to="/dashboard" className="text-white hover:text-gray-200">
+            Dashboard
+          </Link>
           
           <button
             onClick={toggleSettings}

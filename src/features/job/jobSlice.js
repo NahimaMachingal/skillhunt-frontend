@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+
 const API_URL = 'http://localhost:8000/api/job/'; // Update API_URL for consistency
 
 // Thunk for posting a job
@@ -245,6 +246,25 @@ export const fetchApplicantsForJob = createAsyncThunk(
   );
   
 
+  // Add this in jobSlice.js
+export const fetchUserAppliedJobs = createAsyncThunk(
+    'job/fetchUserAppliedJobs',
+    async (_, { getState, rejectWithValue }) => {
+        try {
+            const state = getState();
+            const accessToken = state.auth.accessToken; // Assuming auth token is stored in the state
+            const response = await axios.get(`${API_URL}user/applied-jobs/`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const fetchAdminApplications = createAsyncThunk(
     'job/fetchAdminApplications',
     async (_, { getState, rejectWithValue }) => {
@@ -263,6 +283,25 @@ export const fetchAdminApplications = createAsyncThunk(
     }
 );
 
+// jobSlice.js
+export const checkIfApplied = createAsyncThunk(
+    'job/checkIfApplied',
+    async (jobId, { getState, rejectWithValue }) => {
+        try {
+            const state = getState();
+            const accessToken = state.auth.accessToken;
+            const response = await axios.get(`${API_URL}jobs/${jobId}/is-applied/`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            return response.data.is_applied;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 
 
 const jobSlice = createSlice({
@@ -275,9 +314,11 @@ const jobSlice = createSlice({
         applicantsForJob: [],
         adminApplications: [],
         adminJobs: [],
+        appliedJobs:[],
         job: null,
         status: 'idle',        
         error: null,
+        isApplied: false,
         
     },
     reducers: {},
@@ -296,6 +337,18 @@ const jobSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || action.payload || 'An unknown error occurred'; // Set the error
                 console.error('Job posting failed:', action.error);
+            })
+
+            .addCase(fetchUserAppliedJobs.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchUserAppliedJobs.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.appliedJobs = action.payload; // Store user-applied jobs
+            })
+            .addCase(fetchUserAppliedJobs.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
             })
 
             .addCase(fetchJobs.pending, (state) => {
@@ -405,6 +458,11 @@ const jobSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.payload;
             })
+            
+            .addCase(checkIfApplied.fulfilled, (state, action) => {
+                state.isApplied = action.payload;
+            })
+            
 
             .addCase(fetchAdminJobs.pending, (state) => {
                 state.status = 'loading';

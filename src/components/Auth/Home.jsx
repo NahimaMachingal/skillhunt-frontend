@@ -21,6 +21,10 @@ const Home = () => {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchLocation, setSearchLocation] = useState('');
 
+    // States for pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const jobsPerPage = 6;
+
     useEffect(() => {
         dispatch(fetchApprovedJobs());
     }, [dispatch]);
@@ -44,7 +48,8 @@ const Home = () => {
             (salaryRange === '10000+' && job.salary_min > 10000);
         const matchesRemote = !isRemote || job.is_remote;
         const matchesKeyword =
-            !searchKeyword || job.title.toLowerCase().includes(searchKeyword.toLowerCase());
+            !searchKeyword || job.title.toLowerCase().includes(searchKeyword.toLowerCase()) || job.employer_company_name.toLowerCase().includes(searchKeyword.toLowerCase());
+            
         const matchesLocation =
             !searchLocation || job.location.toLowerCase().includes(searchLocation.toLowerCase());
         return (
@@ -56,6 +61,17 @@ const Home = () => {
             matchesLocation
         );
     });
+     // Pagination Logic
+     const indexOfLastJob = currentPage * jobsPerPage;
+     const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+     const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
+ 
+     // Change page
+     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+ 
+     // Calculate total pages
+     const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
+ 
 
     return (
         <div className="min-h-screen bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-100 p-6">
@@ -121,9 +137,9 @@ const Home = () => {
                             className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400"
                         >
                             <option>All</option>
-                            <option>Entry-Level</option>
-                            <option>Mid-level</option>
-                            <option>Senior-Level</option>
+                            <option>Entry level</option>
+                            <option>Mid level</option>
+                            <option>Senior level</option>
                             <option>Executive</option>
                         </select>
                     </div>
@@ -161,11 +177,11 @@ const Home = () => {
                 <main className="lg:col-span-3">
                     <div className="mb-8">
                         <h1 className="text-4xl font-extrabold text-blue-800 mb-4">Recommended Jobs</h1>
-                        <p className="text-lg font-medium text-gray-600">({filteredJobs.length} results found)</p>
+                        <p className="text-lg font-medium text-gray-600">({currentJobs.length} results found)</p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredJobs.map((job) => (
+                        {currentJobs.map((job) => (
                             <div
                                 key={job.id}
                                 className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
@@ -184,7 +200,7 @@ const Home = () => {
                                     <strong>Posted:</strong> {new Date(job.posted_at).toLocaleDateString()}
                                 </p>
                                 <p className="text-gray-600 mb-4">
-                                    <strong>Salary:</strong> {job.salary_max ? `$${job.salary_min}/hr` : 'Not specified'}
+                                    <strong>Salary:</strong> {job.currency} {job.salary_max ? `${job.salary_min}/hr` : 'Not specified' } 
                                 </p>
                                 <button
                                     onClick={() => handleDetailsClick(job.id)}
@@ -195,6 +211,28 @@ const Home = () => {
                             </div>
                         ))}
                     </div>
+
+                        {/* Pagination */}
+                    <div className="flex justify-center mt-8">
+                        <button
+                            onClick={() => paginate(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            className={`px-4 py-2 rounded-lg mr-2 ${currentPage === 1 ? 'bg-gray-300 text-gray-500 ' : 'bg-blue-600 text-white'}`}
+    >
+                            Previous
+                        </button>
+                        <span className="px-4 py-2 text-gray-700">
+                            Page {currentPage} of {totalPages}
+                        </span>
+                        <button
+                            onClick={() => paginate(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            className={`px-4 py-2 rounded-lg ml-2 ${currentPage === totalPages ? 'bg-gray-300 text-gray-500 ' : 'bg-blue-600 text-white'}`}
+    >
+                            Next
+                        </button>
+                    </div>
+
                 </main>
             </div>
         </div>

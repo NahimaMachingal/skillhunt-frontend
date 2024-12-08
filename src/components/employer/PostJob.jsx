@@ -16,7 +16,7 @@ const PostJob = () => {
 
     const validationSchema = Yup.object({
         title: Yup.string().required('Job title is required'),
-        description: Yup.string().required('Job description is required'),
+        description: Yup.string().required('Job description is required').min(20, 'Job description must be at least 50 characters long'),
         qualifications: Yup.string().required('Job qualifications are required'),
         employment_type: Yup.string().required('Employment type is required'),
         posted_at: Yup.string().required('Posting date is required'),
@@ -27,6 +27,7 @@ const PostJob = () => {
         application_deadline: Yup.date().optional(),
         experience_level: Yup.string().optional(),
         job_function: Yup.string().optional(),
+        currency: Yup.string().required('Currency is required'),
     });
 
 
@@ -70,6 +71,7 @@ const PostJob = () => {
                     status: 'open',
                     experience_level: '',
                     job_function: '',
+                    currency: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
@@ -93,7 +95,8 @@ const PostJob = () => {
                 
                 <div className="mb-4">
     <label className="block mb-2">Job Description</label>
-    <textarea
+    <Field
+        as = "textarea"
         name="description"
         className="border p-2 w-full"
         rows="5"
@@ -104,7 +107,8 @@ const PostJob = () => {
 
 <div className="mb-4">
     <label className="block mb-2">Responsibilities</label>
-    <textarea
+    <Field
+        as = "textarea"
         name="responsibilities"
         
         className="border p-2 w-full"
@@ -118,7 +122,8 @@ const PostJob = () => {
 
 <div className="mb-4">
     <label className="block mb-2">Qualifications</label>
-    <textarea
+    <Field
+        as = "textarea"
         name="qualifications"
         className="border p-2 w-full"
         rows="5"
@@ -189,6 +194,25 @@ const PostJob = () => {
     />
     
 </div>
+{/* Currency field */}
+<div className="mb-4">
+                        <label className="block mb-2">Currency</label>
+                        <Field
+                            as="select"
+                            name="currency"
+                            className="border p-2 w-full"
+                        >
+                            <option value="" disabled>Select currency</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                            <option value="INR">INR</option>
+                            <option value="AED">AED</option>
+                            <option value="AUD">AUD</option>
+                            {/* Add other currencies as needed */}
+                        </Field>
+                        <ErrorMessage name="currency" component="p" className="text-red-500 text-sm" />
+                    </div>
 
 <div className="mb-4">
     <label className="flex items-center">

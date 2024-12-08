@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+
 const API_URL = 'http://localhost:8000/api/profile/';
 
 // Thunk for fetching the profile
@@ -19,6 +20,8 @@ export const fetchProfile = createAsyncThunk('profile/fetchProfile', async (_, t
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
+
+
 
 // Add a new thunk for updating the profile
 export const updateProfile = createAsyncThunk('profile/updateProfile', async (updatedData, thunkAPI) => {

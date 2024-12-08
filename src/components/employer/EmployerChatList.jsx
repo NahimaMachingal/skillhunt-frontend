@@ -1,12 +1,11 @@
-//src/components/jobseeker/ChatList.jsx
+//src/components/employer/EmployerChatList.jsx
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchChatRooms, setCurrentChatRoom } from '../../features/chat/chatSlice';
-import { fetchProfile } from '../../features/jobseekerprofile/jobseekerProfileSlice';
+import { fetchProfile } from '../../features/employerprofile/employerProfileSlice';
 
-
-const ChatList = () => {
+const EmployerChatList = () => {
 
   const defaultProfileImg = '/profile.jpg';
   const dispatch = useDispatch();
@@ -15,13 +14,11 @@ const ChatList = () => {
   const chatRooms = useSelector(state => state.chat.chatRooms);
   const status = useSelector(state => state.chat.status);
   const { data, error } = useSelector((state) => state.profile);
-  console.log("new username is", data);
+  console.log("new username is", data?.user?.user_type);
   const currentUser = useSelector(state => state.auth.user);
   console.log(currentUser,"currentUser")
   const [searchTerm, setSearchTerm] = useState('');
   const currentChatRoom = useSelector((state) => state.chat.currentChatRoom);
-  
-
 
   useEffect(() => {
     dispatch(fetchChatRooms());
@@ -29,9 +26,8 @@ const ChatList = () => {
 
   useEffect(() => {
     dispatch(fetchProfile());
-    
   }, [dispatch]);
-
+  
   useEffect(() => {
     if (chatRooms.length && currentChatRoom) {
       const updatedRoom = chatRooms.find(room => room.id === currentChatRoom.id);
@@ -40,10 +36,9 @@ const ChatList = () => {
       }
     }
   }, [chatRooms, currentChatRoom, dispatch]);
- 
 
   const filteredChatRooms = chatRooms.filter(room => {
-    const otherPerson = room.jobseeker?.id === data?.user?.id ? room.employer : room.jobseeker;
+    const otherPerson = room.employer?.id === data?.user?.id ? room.jobseeker : room.employer;
     console.log("jobseeker id is", room.jobseeker.id)
     console.log("room of jobseeker is", room.jobseeker)
     console.log("room of employer is", room.employer)
@@ -75,9 +70,7 @@ const ChatList = () => {
 
       <div className="w-full max-w-md bg-white bg-opacity-80 rounded-lg overflow-auto p-4">
         {filteredChatRooms.map(room => {
-          const otherPerson = room.jobseeker.id === data?.user?.id ? room.employer : room.jobseeker;
-
-          
+          const otherPerson = room.employer.id === data?.user?.id ? room.jobseeker : room.employer;
 
           return (
             <div key={room.id}>
@@ -85,7 +78,14 @@ const ChatList = () => {
                 onClick={() => dispatch(setCurrentChatRoom(room))}
                 className="flex items-center space-x-4 bg-white p-2 mb-2 rounded-lg hover:bg-gray-100 cursor-pointer"
               >
-                
+                <img
+                  src={
+                    otherPerson?.profile_img
+                    ? `http://localhost:8000${otherPerson.profile_img}`
+                  : defaultProfileImg}
+                  alt={otherPerson.username}
+                  className="w-14 h-14 rounded-full"
+                />
                 <div className="flex-grow">
                   <h2 className="font-semibold">{otherPerson.username}</h2>
                   {room.last_message && (
@@ -106,5 +106,5 @@ const ChatList = () => {
   );
 };
 
-export default ChatList;
+export default EmployerChatList;
 

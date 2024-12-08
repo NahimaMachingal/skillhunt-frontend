@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+
 const API_URL = 'http://localhost:8000/api/eprofile/';
 
 // Thunk for fetching the profile
@@ -36,6 +37,25 @@ export const updateProfile = createAsyncThunk('eprofile/updateProfile', async (u
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
+
+// Thunk for fetching profile pic by ID
+export const fetchProfileById = createAsyncThunk(
+  'profile/fetchProfileById',
+  async (id, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const token = state.auth?.accessToken;
+    try {
+      const response = await axios.get(`${API_URL}${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return { id, profile_pic: response.data.profile_pic };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
 
 
 const eprofileSlice = createSlice({
@@ -76,6 +96,18 @@ const eprofileSlice = createSlice({
       .addCase(updateProfile.rejected, (state, action) => {
         state.updateStatus = 'failed';
         state.updateError = action.payload;
+      })
+      .addCase(fetchProfileById.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchProfileById.fulfilled, (state, action) => {
+        const { id, profile_pic } = action.payload;
+        state.data[id] = { profile_pic }; // Store by ID
+        state.status = 'succeeded';
+      })
+      .addCase(fetchProfileById.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
       });
   },
 });

@@ -56,6 +56,7 @@ const Navbar = () => {
               </Link>
             </div>
           )}
+           <Link to="/employerchat" className="text-white hover:text-gray-200">Chat</Link>
           <button
             onClick={handleLogout}
             className="text-white hover:text-gray-200"

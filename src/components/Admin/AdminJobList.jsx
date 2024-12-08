@@ -63,8 +63,8 @@ const AdminJobList = () => {
                 <td className="py-2 px-4 border-b">{job.qualifications || 'N/A'}</td>
                 <td className="py-2 px-4 border-b">{job.location || 'N/A'}</td>
                 <td className="py-2 px-4 border-b">
-                  {job.salary_min && job.salary_max
-                    ? `$${job.salary_min} - $${job.salary_max}`
+                  {job.currency} {job.salary_min && job.salary_max
+                    ? `${job.salary_min} - ${job.salary_max}`
                     : 'N/A'}
                 </td>
                 <td className="py-2 px-4 border-b">{job.employment_type}</td>
@@ -74,7 +74,7 @@ const AdminJobList = () => {
                 <td className="py-2 px-4 border-b">
                   {job.experience_level || 'N/A'}
                 </td>
-                <td className="py-2 px-4 border-b">{job.status}</td>
+                <td className="py-2 px-4 border-b">{job.is_active ? 'Active' : 'Deleted'}</td>
                 <td className="py-2 px-4 border-b">
                   {new Date(job.posted_at).toLocaleDateString()}
                 </td>

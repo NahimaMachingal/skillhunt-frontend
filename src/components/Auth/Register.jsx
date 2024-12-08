@@ -160,7 +160,8 @@ const Register = () => {
             
 
             <div className="mb-4">
-              <select
+              <Field
+              as="select"
                 name="user_type"
                 className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                 
@@ -169,7 +170,7 @@ const Register = () => {
               >
                 <option value="jobseeker">Jobseeker</option>
                 <option value="employee">Employee</option>
-              </select>
+              </Field>
               <ErrorMessage name="user_type" component="p" className="text-red-500 text-sm mt-1" />
             </div>
             <button type="submit" className="w-full p-3 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-300">

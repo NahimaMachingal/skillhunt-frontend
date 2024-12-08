@@ -69,7 +69,7 @@ const JobDetail = () => {
                         <p className="text-gray-600">{job.experience_level}</p>
 
                         <p className="text-lg font-semibold text-gray-700 mt-4">Salary Range:</p>
-                        <p className="text-gray-600">{job.salary_min} - {job.salary_max}</p>
+                        <p className="text-gray-600">{job.currency} {job.salary_min} - {job.salary_max}</p>
 
                         <p className="text-lg font-semibold text-gray-700 mt-4">Is Remote:</p>
                         <p className="text-gray-600">{job.is_remote ? 'Yes' : 'No'}</p>

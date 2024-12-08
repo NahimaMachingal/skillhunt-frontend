@@ -36,6 +36,7 @@ const EditJobDetail = () => {
         status: job.status || 'open',
         experience_level: job.experience_level || '',
         job_function: job.job_function || '',
+        currency: job.currency || '',
       });
     }
   }, [job]);
@@ -48,6 +49,7 @@ const EditJobDetail = () => {
     location: Yup.string().required('Location is required'),
     salary_min: Yup.number().optional(),
     salary_max: Yup.number().optional(),
+    currency: Yup.string().required('currency is required'),
   });
 
   const handleSubmit = (values) => {
@@ -142,6 +144,12 @@ const EditJobDetail = () => {
 
           <div className="mb-4">
             <div className="flex gap-4">  
+
+            <div className="flex-1">
+            <label className="block mb-2"> Currency</label>
+            <Field type="text" name="currency" className="border p-2 w-full" />
+            <ErrorMessage name="currency" component="p" className="text-red-500 text-sm" />
+          </div>
 
             <div className="flex-1">
             <label className="block mb-2"> Minimum Salary</label>

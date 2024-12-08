@@ -1,4 +1,4 @@
-//src/components/jobseeker/ChatRoom.jsx
+//src/components/employer/EmployerChatRoom.jsx
 
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,10 +8,10 @@ import {
   sendWebSocketMessage,
   closeWebSocket,
 } from "../../utils/websocket";
-import { fetchProfile } from "../../features/jobseekerprofile/jobseekerProfileSlice";
+import { fetchProfile } from "../../features/employerprofile/employerProfileSlice";
 import { fetchChatRooms } from "../../features/chat/chatSlice";
 
-const ChatRoom = () => {
+const EmployerChatRoom = () => {
   const dispatch = useDispatch();
   const currentChatRoom = useSelector((state) => state.chat.currentChatRoom);
   const messages = useSelector((state) => state.chat.messages);
@@ -94,41 +94,36 @@ const ChatRoom = () => {
     return <div className="text-center text-lg">Select a chat room</div>;
 
   const otherPerson =
-    currentChatRoom.jobseeker.id === data?.user?.id
-      ? currentChatRoom.employer
-      : currentChatRoom.jobseeker;
+    currentChatRoom.employer.id === data?.user?.id
+      ? currentChatRoom.jobseeker
+      : currentChatRoom.employer;
 
-  
-    const profilePic =
+      const profilePic =
       currentChatRoom.jobseeker.id === data?.user?.id
-        ? currentChatRoom.employer_profile_pic
-        : currentChatRoom.jobseeker_profile_pic;
+        ? currentChatRoom.jobseeker_profile_pic
+        : currentChatRoom.employer_profile_pic;
     console.log(`${profilePic}`,":reciever profile pic")
-
-    console.log(profilePic,":reciever profile picture 2")
     const defaultProfileImg = '/profile.jpg';
-
   return (
     <div className="flex flex-col items-center p-4 bg-gray-100 max-w-4xl mx-auto rounded-xl shadow-lg">
       <div className="flex items-center text-2xl font-semibold mb-4">
       
-          <img
+      <img
         src={profilePic ? `http://localhost:8000${profilePic}` : defaultProfileImg}
         alt={`${otherPerson.username}'s profile`}
         className="w-10 h-10 rounded-full mr-2"
       />
       Chat with {otherPerson.username}
-    
-      </div>
+  </div>
 
       <div className="flex-grow overflow-y-auto bg-gray-50 p-4 rounded-lg mb-4 border border-gray-300">
         {messages.map((message) => (
           <div
             key={message.id || `temp-${message.timestamp}`}
-            className={`mb-2 p-2 rounded-lg ${message.sender.id === data.user.id ? "bg-pink-100 self-end" : "bg-green-200 self-start"} max-w-3/4`}
+            className={`mb-2 p-2 rounded-lg ${message.sender.id === data.user.id ? "bg-pink-100 self-end" : "bg-green-100 self-start"} max-w-3/4`}
           >
             <div className="font-semibold">
-              {message.sender.id === data.user.id ? "You"  : otherPerson.username}
+            {message.sender.id === data.user.id ? "You" : otherPerson.username}
             </div>
             <div>{message.content || "No content"}</div>
             <div className="text-sm text-gray-500">
@@ -163,4 +158,4 @@ const ChatRoom = () => {
   );
 };
 
-export default ChatRoom;
+export default EmployerChatRoom;

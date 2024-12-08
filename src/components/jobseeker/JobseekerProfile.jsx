@@ -11,6 +11,7 @@ const JobseekerProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data, status, error } = useSelector((state) => state.profile);
+  console.log(data,"data");
 
   const handleEditClick = () =>{
     // Navigate to the ProfileEdit page when the button is clicked

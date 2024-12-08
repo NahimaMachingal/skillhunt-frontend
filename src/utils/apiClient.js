@@ -1,65 +1,59 @@
 //src/utils/utils.js
 
-import axios from "axios";
 import store from "../store";
-import { loginSuccess, logout } from "../features/auth/authSlice";
+
+import axios from "axios";
+import { logout } from "../features/auth/authSlice";
+
+const API_URL = "http://localhost:8000/api/";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8000/api/",
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-apiClient.interceptors.request.use(
-  async (config) => {
-    try {
-      const state = store.getState();
-      let { access, refresh } = state.auth;
+// Add an interceptor to handle token expiration
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-      // Check if the access token exists and is not expired
-      if (!access || checkTokenExpired(access)) {
-        // Attempt to refresh the token
-        const response = await axios.post(`${config.baseURL}token/refresh/`, {
-          refresh,
+    // If 401 Unauthorized error and it's not a retry request
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+          throw new Error("No refresh token available");
+        }
+
+        // Refresh access token
+        const refreshResponse = await axios.post(`${API_URL}token/refresh/`, {
+          refresh: refreshToken,
         });
-        const { access: newAccessToken, refresh: newRefreshToken } = response.data;
 
-        // Update the Redux store with the new tokens
-        store.dispatch(
-          loginSuccess({
-            user: state.auth.user,
-            access: newAccessToken,
-            refresh: newRefreshToken || refresh,
-          })
-        );
+        const { access } = refreshResponse.data;
 
-        // Use the new access token in the request
-        access = newAccessToken;
+        // Update the access token in localStorage
+        localStorage.setItem("accessToken", access);
+
+        // Update the Authorization header and retry the request
+        originalRequest.headers["Authorization"] = `Bearer ${access}`;
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        console.error("Refresh token expired:", refreshError);
+
+        // Dispatch logout action if refresh fails
+        store.dispatch(logout());
+        return Promise.reject(refreshError);
       }
-
-      // Add the Authorization header
-      config.headers.Authorization = `Bearer ${access}`;
-    } catch (error) {
-      console.error("Failed to refresh access token:", error);
-
-      // If refreshing fails, log out the user
-      store.dispatch(logout());
-      throw error;
     }
 
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// Function to check if a token is expired
-function checkTokenExpired(token) {
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    const now = Math.floor(Date.now() / 1000);
-    return payload.exp < now;
-  } catch (error) {
-    console.error("Invalid token format:", error);
-    return true; // Treat invalid tokens as expired
+    return Promise.reject(error);
   }
-}
+);
 
 export default apiClient;
