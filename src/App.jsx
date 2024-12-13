@@ -38,8 +38,45 @@ import "react-toastify/dist/ReactToastify.css";
 import Chat from "./components/jobseeker/Chat";
 import EmployerChat from "./components/employer/EmployerChat";
 import Dashboard from "./components/jobseeker/Dashboard";
+import InterviewCandidates from "./components/employer/InterviewCandidates";
+import AuthHOC from "./components/AuthHOC";
+import ScheduleInterview from "./components/Interview/ScheduleInterview";
+import InterviewDetails from "./components/Interview/InterviewDetails";
+import ApplicantsForInterview from "./components/Interview/ApplicantsForInterview";
 
 const App = () => {
+  const restrictedPaths = [
+    "/home",
+    "/jobs",
+    "/ehome",
+    "/jobseeker/jobseekerprofile",
+    "/employer/employerprofile",
+    "/postjob",
+    "/appliedcandidates",
+    "/job/:jobId",
+    "/edit-job/:id",
+    "/jobseeker/jprofileedit",
+    "/admin/home",
+    "/employerchat",
+    "/job/:jobId/applicants",
+    "/interviewcandidates",
+    "/employer/eprofileedit",
+    "/jobseeker/job/:id",
+    "/jobs/:id/apply",
+    "/dashboard",
+    "/chat",
+    "/pendingjobs",
+    "/userverification",
+    "/adminappliedjobs",
+    "/admin/joblist",
+    "/admin/employees",
+    "/schedule/:applicantId",
+    "/interview-details/:jobId",
+    "/employer/jobs/:jobId/interviews",
+
+
+    // Add other paths that need authentication here
+  ];
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       
@@ -52,95 +89,157 @@ const App = () => {
         <Route
           path="/ehome"
           element={
-            <ELayout>
-              
-              <EHome />
-              
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>              
+              <EHome />              
             </ELayout>
+            </AuthHOC>
           }
         />
         <Route
           path="/employer/employerprofile"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <ELayout>
               <EmployerProfile />
             </ELayout>
+            </AuthHOC>
           }
         />
         <Route
           path="/postjob"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <ELayout>
               <PostJob />
             </ELayout>
+            </AuthHOC>
           }
         />
         <Route
           path="/appliedcandidates"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <ELayout>
               <AppliedCandidates />
             </ELayout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+          path="/employer/jobs/:jobId/interviews"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>
+              <ApplicantsForInterview />
+            </ELayout>
+            </AuthHOC>
           }
         />
 
 <Route
           path="/employerchat"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <ELayout>
               <EmployerChat />
             </ELayout>
+            </AuthHOC>
           }
         />
 <Route
           path="/job/:jobId/applicants"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <ELayout>
               <ApplicantsForJob />
             </ELayout>
+            </AuthHOC>
           }
         />
 
         <Route
           path="/jobs"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <ELayout>
               <Jobs />
             </ELayout>
+            </AuthHOC>
+          }
+        />
+        <Route
+          path="/interviewcandidates"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>
+              <InterviewCandidates />
+            </ELayout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+          path="/schedule/:applicantId"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>
+              <ScheduleInterview />
+            </ELayout>
+            </AuthHOC>
           }
         />
         <Route
          path="/edit-job/:id" 
          element={
+          <AuthHOC restrictedPaths={restrictedPaths}>
            <ELayout>
              <EditJobDetail />
            </ELayout>
+           </AuthHOC>
          } /> 
         <Route
           path="/employer/eprofileedit"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <ELayout>
               <EProfileEdit />
             </ELayout>
+            </AuthHOC>
           }
         />
 
          {/* User Home Route */}
          <Route
-          path="/home"
+         path="/home"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <Layout>
               <Home />
             </Layout>
+            </AuthHOC>
+          }
+        />
+        <Route
+         path="/interview-details/:jobId"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <InterviewDetails />
+            </Layout>
+            </AuthHOC>
           }
         />
         {/* User Home Route */}
         <Route
           path="/jobseeker/job/:id"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <Layout>
               <JobSeekerJobDetail />
             </Layout>
+            </AuthHOC>
           }
         />
 
@@ -148,34 +247,41 @@ const App = () => {
         <Route
           path="/jobs/:id/apply"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <Layout>
               <JobApplicationForm />
             </Layout>
+            </AuthHOC>
           }
         />
         {/* Job Application Route */}
         <Route
           path="/dashboard"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <Layout>
               <Dashboard />
             </Layout>
+            </AuthHOC>
           }
         />
         
         <Route
           path="/jobseeker/jobseekerprofile"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <Layout>
               <JobseekerProfile />
             </Layout>
+            </AuthHOC>
           }
         />
     <Route
           path="/chat"
           element={
-            
+            <AuthHOC restrictedPaths={restrictedPaths}>
               <Chat />
+              </AuthHOC>
             
           }
         />
@@ -184,9 +290,11 @@ const App = () => {
         <Route
           path="/jobseeker/jprofileedit"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <Layout>
               <JProfileEdit />
             </Layout>
+            </AuthHOC>
           }
         />
         
@@ -196,26 +304,32 @@ const App = () => {
         <Route
           path="/admin/home"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <AdminLayout>
               <AdminHome />
             </AdminLayout>
+            </AuthHOC>
           }
         />
         <Route
           path="/pendingjobs"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <AdminLayout>
               <PendingJobs />
             </AdminLayout>
+            </AuthHOC>
           }
         />
 
 <Route
           path="/userverification"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <AdminLayout>
               <UserVerification />
             </AdminLayout>
+            </AuthHOC>
           }
         />
 
@@ -223,35 +337,43 @@ const App = () => {
 <Route
           path="/adminappliedjobs"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <AdminLayout>
               <AdminAppliedJobs />
             </AdminLayout>
+            </AuthHOC>
           }
         />
 <Route
           path="/admin/joblist"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <AdminLayout>
               <AdminJobList />
             </AdminLayout>
+            </AuthHOC>
           }
         />
 
         <Route
           path="/admin/employees"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <AdminLayout>
               <EmployeeList />
             </AdminLayout>
+            </AuthHOC>
           }
         />
         {/* Job Detail Route */}
         <Route
           path="/job/:jobId"
           element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
             <AdminLayout>
               <JobDetail />
             </AdminLayout>
+            </AuthHOC>
           }
         />
         <Route

@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { fetchApplicantsForJob, updateApplicationStatus } from "../../features/job/jobSlice";
+import { Link } from "react-router-dom";
 
 const ApplicantsForJob = () => {
   const { jobId } = useParams();
   const dispatch = useDispatch();
   const applicants = useSelector((state) => state.job.applicantsForJob || []);
-
+  console.log("apppllliccants::",applicants)
   const loading = useSelector((state) => state.job.loading);
   const error = useSelector((state) => state.job.error);
 
@@ -80,6 +81,13 @@ const ApplicantsForJob = () => {
                                             <option value="Accepted">Accepted</option>
                                             <option value="Rejected">Rejected</option>
                                         </select>
+                                        <div className="mt-2">
+                                        {applicant.status === "Interview" && (
+                                           <Link
+                                            to={`/schedule/${applicant.id}?job_id=${applicant.job_id}&job_title=${applicant.job_title}&applicant_name=${encodeURIComponent(applicant.applicant_name)}&applicant_email=${encodeURIComponent(applicant.applicant_email)}`} className="text-blue-500 hover:text-blue-700 underline" > Schedule 
+                                            </Link> 
+                                          )}
+                                          </div>
                                     </td>
                 </tr>
               ))}

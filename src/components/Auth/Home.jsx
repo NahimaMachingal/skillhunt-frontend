@@ -35,6 +35,7 @@ const Home = () => {
 
     // Filter logic
     const filteredJobs = approvedJobs.filter((job) => {
+        const matchesActive = job.is_active; // Ensure the job is active
         const matchesEmploymentType =
             employmentType === 'All' || job.employment_type === employmentType;
         const matchesExperienceLevel =
@@ -53,6 +54,7 @@ const Home = () => {
         const matchesLocation =
             !searchLocation || job.location.toLowerCase().includes(searchLocation.toLowerCase());
         return (
+            matchesActive &&
             matchesEmploymentType &&
             matchesExperienceLevel &&
             matchesSalaryRange &&

@@ -5,6 +5,7 @@ import usersReducer from './features/users/usersSlice';
 import profileReducer from './features/jobseekerprofile/jobseekerProfileSlice';
 import jobReducer from './features/job/jobSlice';
 import chatReducer from './features/chat/chatSlice';
+import interviewReducer from './features/interview/interviewSlice';
 
 
 
@@ -15,6 +16,7 @@ const store = configureStore({
     profile: profileReducer, 
     job: jobReducer,
     chat: chatReducer,
+    interview: interviewReducer,
   },
 });
 

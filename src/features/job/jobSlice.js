@@ -2,7 +2,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-
 const API_URL = 'http://localhost:8000/api/job/'; // Update API_URL for consistency
 
 // Thunk for posting a job
@@ -301,6 +300,7 @@ export const checkIfApplied = createAsyncThunk(
         }
     }
 );
+
 
 
 

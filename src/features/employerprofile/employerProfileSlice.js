@@ -21,6 +21,7 @@ export const fetchProfile = createAsyncThunk('profile/fetchProfile', async (_, t
   }
 });
 
+
 // Add a new thunk for updating the profile
 export const updateProfile = createAsyncThunk('eprofile/updateProfile', async (updatedData, thunkAPI) => {
   const state = thunkAPI.getState(); // Access the Redux state
@@ -56,7 +57,6 @@ export const fetchProfileById = createAsyncThunk(
     }
   }
 );
-
 
 const eprofileSlice = createSlice({
   name: 'profile',

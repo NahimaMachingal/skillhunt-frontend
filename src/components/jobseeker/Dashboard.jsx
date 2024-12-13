@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 const Dashboard = () => {
     const dispatch = useDispatch();
     const { appliedJobs, status, error } = useSelector((state) => state.job);
+    console.log("hsdjfjhjf:",appliedJobs)
     
     useEffect(() => {
         dispatch(fetchUserAppliedJobs());
@@ -69,7 +70,17 @@ const Dashboard = () => {
     <p className="text-gray-700 text-lg font-semibold">
         Status: <span className="text-yellow-700">{job.is_active ? job.status : 'Job deleted by Employer'}</span>
     </p>
+    {job.status === "Interview" && job.is_active && (
+    <Link
+        to={`/interview-details/${job.job_id}`}
+        className="text-blue-600 text-sm underline hover:text-blue-800 cursor-pointer"
+    >
+        Details
+    </Link>
+)}
 </div>
+
+
                             
                             <Link 
   to={job.id ? `/jobseeker/job/${job.job_id}` : '#'}  // Prevent navigation if the job is not found

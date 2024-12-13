@@ -26,6 +26,7 @@ const ChatRoom = () => {
   const userid = useSelector((state) => state.auth.userid);
   console.log(userid, "ewe");
   const username = useSelector((state) => state.auth.username);
+  const [displayCount, setDisplayCount] = useState(5);
 
   useEffect(() => {
     if (currentChatRoom && token) {
@@ -37,14 +38,10 @@ const ChatRoom = () => {
             ? message
             : { ...message, id: `temp-${Date.now()}` };
           dispatch(addMessage(messageWithId));
-          // Refresh chat rooms on new message
-        dispatch(fetchChatRooms());
+            dispatch(fetchChatRooms());
         },
         token,
       );
-
-
-
       return () => {
         closeWebSocket();
       };
@@ -90,8 +87,12 @@ const ChatRoom = () => {
     }
   };
 
+  const handleLoadMore = () => {
+    setDisplayCount((prev) => prev + 5);
+  };
+
   if (!currentChatRoom)
-    return <div className="text-center text-lg">Select a chat room</div>;
+    return <div className="text-center text-lg">Select a chat </div>;
 
   const otherPerson =
     currentChatRoom.jobseeker.id === data?.user?.id
@@ -108,6 +109,8 @@ const ChatRoom = () => {
     console.log(profilePic,":reciever profile picture 2")
     const defaultProfileImg = '/profile.jpg';
 
+    const displayedMessages = messages.slice(-displayCount);
+
   return (
     <div className="flex flex-col items-center p-4 bg-gray-100 max-w-4xl mx-auto rounded-xl shadow-lg">
       <div className="flex items-center text-2xl font-semibold mb-4">
@@ -122,10 +125,18 @@ const ChatRoom = () => {
       </div>
 
       <div className="flex-grow overflow-y-auto bg-gray-50 p-4 rounded-lg mb-4 border border-gray-300">
-        {messages.map((message) => (
+      {messages.length > displayCount && (
+          <button
+            onClick={handleLoadMore}
+            className="text-blue-500 text-sm mb-2"
+          >
+            Previous Messages
+          </button>
+        )}
+        {displayedMessages.map((message) => (
           <div
             key={message.id || `temp-${message.timestamp}`}
-            className={`mb-2 p-2 rounded-lg ${message.sender.id === data.user.id ? "bg-pink-100 self-end" : "bg-green-200 self-start"} max-w-3/4`}
+            className={`mb-2 p-2 rounded-lg max-w-3/4 ${message.sender.id === data.user.id ? "bg-pink-100 self-end ml-4" : "bg-green-100 self-start mr-4"} max-w-3/4`}
           >
             <div className="font-semibold">
               {message.sender.id === data.user.id ? "You"  : otherPerson.username}

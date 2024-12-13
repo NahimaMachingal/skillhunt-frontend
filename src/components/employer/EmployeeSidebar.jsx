@@ -1,8 +1,20 @@
 // src/components/Employee/EmployeeSidebar.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAppliedCandidates } from '../../features/job/jobSlice';
 
 const EmployeeSidebar = () => {
+  const dispatch = useDispatch();
+  const appliedCandidates = useSelector((state) => state.job.appliedCandidates || []);
+  console.log("app:",appliedCandidates)
+  
+  // Extract job_id from the first applied candidate (or any other logic you may need)
+  const jobId = appliedCandidates.length > 0 ? appliedCandidates[0].job_id : null;
+  useEffect(() => {
+   dispatch(fetchAppliedCandidates)
+  }, [dispatch]);
+
   return (
     <div className="bg-gradient-to-b from-gray-700 to-gray-500 p-6 shadow-lg min-h-screen">
       <div className="text-white text-3xl font-bold mb-8 text-center">
@@ -31,6 +43,14 @@ const EmployeeSidebar = () => {
             className="block text-white hover:text-gray-300 transition duration-300 rounded-md px-3 py-2 transform hover:scale-105"
           >
             Applied Jobs
+          </Link>
+        </li>
+        <li>
+          <Link
+            to={`/employer/jobs/${jobId}/interviews`}
+            className="block text-white hover:text-gray-300 transition duration-300 rounded-md px-3 py-2 transform hover:scale-105"
+          >
+            Applicants for Interview 
           </Link>
         </li>
       </ul>
