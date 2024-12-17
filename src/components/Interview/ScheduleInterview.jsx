@@ -24,7 +24,6 @@ const ScheduleInterview = () => {
     job_title: job_title || "",
     applicant_name: applicant_name || "",
     applicant_email: applicant_email || "",
-    applicant_name:"",
     scheduled_date: "",
     mode: "",
     location: "",

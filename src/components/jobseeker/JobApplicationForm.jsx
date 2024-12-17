@@ -1,5 +1,6 @@
 // src/components/jobseeker/JobApplicationForm.jsx
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitJobApplication } from '../../features/job/jobSlice';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -46,12 +47,17 @@ const JobApplicationForm = () => {
         // Dispatch action to submit the job application
         dispatch(submitJobApplication(formData))
             .then(() => {
-                alert('Application submitted successfully!');
+                toast.success('Application submitted successfully!',
+                    {
+                        autoClose: 3000, // Automatically close after 3 seconds
+                    }
+                );
+
                 navigate('/home'); // Redirect to home page
             })
             .catch((error) => {
                 console.error('Failed to submit application:', error);
-                alert('Failed to submit application. Please try again.');
+                toast.error('Failed to submit application. Please try again.'); // Error toast
             });
     };
 
