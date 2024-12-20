@@ -8,8 +8,12 @@ import {
   sendWebSocketMessage,
   closeWebSocket,
 } from "../../utils/websocket";
+import {
+  connectNotificationWebSocket,
+  sendNotificationWebSocketMessage,
+} from "../../utils/notificationWebSocket";
 import { fetchProfile } from "../../features/jobseekerprofile/jobseekerProfileSlice";
-import { fetchChatRooms } from "../../features/chat/chatSlice";
+import { fetchChatRooms, updateLastMessage } from "../../features/chat/chatSlice";
 
 const ChatRoom = () => {
   const dispatch = useDispatch();
@@ -38,10 +42,20 @@ const ChatRoom = () => {
             ? message
             : { ...message, id: `temp-${Date.now()}` };
           dispatch(addMessage(messageWithId));
-            dispatch(fetchChatRooms());
+             dispatch(fetchChatRooms());
         },
         token,
       );
+      
+
+      // Connect notification WebSocket
+      const notificationSocket = connectNotificationWebSocket(
+        token,
+        data?.user?.id,
+        dispatch
+      );
+
+
       return () => {
         closeWebSocket();
       };
@@ -95,7 +109,6 @@ const ChatRoom = () => {
         username: user.username, // Use the user object
         newMessage,
       });
-
       console.log("Sending message:", {
         user_id: data?.user?.id,
         username: data?.user?.username,
@@ -108,9 +121,15 @@ const ChatRoom = () => {
         username: data?.user?.username, // Use user.username
         timestamp: new Date().toISOString(),
       };
-
-      sendWebSocketMessage(messagePayload);
-
+      sendWebSocketMessage(messagePayload);  
+      // Send notification payload
+      const notificationPayload = {
+        type: "notification",
+        message: `New message from ${data?.user?.username}`,
+        user_id: data?.user?.id,
+        room_id: currentChatRoom.id,
+            };
+      sendNotificationWebSocketMessage(notificationPayload);
       // Re-fetch chat rooms after sending a message
       dispatch(fetchChatRooms());
       setNewMessage("");
@@ -145,7 +164,7 @@ const ChatRoom = () => {
           <img
         src={profilePic ? `http://localhost:8000${profilePic}` : defaultProfileImg}
         alt={`${otherPerson.username}'s profile`}
-        className="w-12 h-12 rounded-full mr-3 object-cover border border-gray-300"
+        className="w-10 h-10 rounded-full mr-3 object-cover border border-gray-300"
         />
       <span className="truncate">Chat with {otherPerson.username}</span>
     
@@ -155,7 +174,7 @@ const ChatRoom = () => {
       <div
         ref={messagesContainerRef}
         className="w-full flex-grow overflow-y-auto bg-white p-4 rounded-lg mb-4 border border-gray-300"
-        style={{ height: "400px" }} // Set a fixed height for the messages container
+        style={{ height: "350px" }} // Set a fixed height for the messages container
       >
         {isFetching  && messages.length > 4 && (
           <div className="text-center text-sm text-gray-500 mb-2">
@@ -165,7 +184,7 @@ const ChatRoom = () => {
         {messages.map((message) => (
           <div
             key={message.id || `temp-${message.timestamp}`}
-            className={`max-w-[70%] mb-3 p-3 rounded-lg shadow-md ${message.sender.id === data.user.id ? "bg-pink-100 self-end ml-96" : "bg-green-100 self-start mr-4"} w-5/12`}
+            className={`max-w-[70%] mb-3 p-3 rounded-lg shadow-md ${message.sender.id === data.user.id ? "bg-green-100 self-end ml-72" : "bg-gray-100 self-start mr-10"} w-5/12`}
           >
             <div className="font-medium text-sm">
               {message.sender.id === data.user.id ? "You"  : otherPerson.username}

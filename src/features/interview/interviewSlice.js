@@ -60,6 +60,46 @@ export const fetchEmployerInterviews = createAsyncThunk(
   }
 );
 
+export const fetchEmployerScheduledInterviews = createAsyncThunk(
+  'interview/fetchEmployerScheduledInterviews',
+  async (jobId, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const accessToken = state.auth.accessToken; // Assuming the token is stored in the auth slice
+      const response = await axios.get(`${API_URL}employer/interviews/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data; // Returns the fetched interviews
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Something went wrong');
+    }
+  }
+);
+
+
+export const updateInterviewStatus = createAsyncThunk(
+  'interview/updateInterviewStatus',
+  async ({ interviewId, newStatus }, { getState, rejectWithValue }) => {
+      try {
+          const state = getState();
+          const accessToken = state.auth.accessToken;
+          const response = await axios.patch(
+              `${API_URL}interview/${interviewId}/`,
+              { status: newStatus },
+              {
+                  headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                  },
+              }
+          );
+          return response.data;
+      } catch (error) {
+          return rejectWithValue(error.response?.data || 'Failed to update status');
+      }
+  }
+);
 
 // Slice for interview management
 const interviewSlice = createSlice({
@@ -105,7 +145,30 @@ const interviewSlice = createSlice({
   .addCase(fetchEmployerInterviews.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.payload;
-  });
+  })
+
+  .addCase(updateInterviewStatus.fulfilled, (state, action) => {
+                const updatedInterview = action.payload;
+                state.interviews = state.interviews.map((interview) =>
+                    interview.id === updatedInterview.id ? updatedInterview : interview
+                );
+            })
+            .addCase(updateInterviewStatus.rejected, (state, action) => {
+                state.error = action.payload;
+                toast.error('Failed to update interview status');
+            })
+
+            .addCase(fetchEmployerScheduledInterviews.pending, (state) => {
+              state.status = 'loading';
+            })
+            .addCase(fetchEmployerScheduledInterviews.fulfilled, (state, action) => {
+              state.status = 'succeeded';
+              state.interviews = action.payload;
+            })
+            .addCase(fetchEmployerScheduledInterviews.rejected, (state, action) => {
+              state.status = 'failed';
+              state.error = action.error.message;
+            });
   },
 });
 

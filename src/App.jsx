@@ -43,6 +43,7 @@ import AuthHOC from "./components/AuthHOC";
 import ScheduleInterview from "./components/Interview/ScheduleInterview";
 import InterviewDetails from "./components/Interview/InterviewDetails";
 import ApplicantsForInterview from "./components/Interview/ApplicantsForInterview";
+import ScheduledInterviews from "./components/Interview/ScheduledInterviews";
 
 const App = () => {
   const restrictedPaths = [
@@ -73,6 +74,7 @@ const App = () => {
     "/schedule/:applicantId",
     "/interview-details/:jobId",
     "/employer/jobs/:jobId/interviews",
+    "/scheduledinterviews",
 
 
     // Add other paths that need authentication here
@@ -154,6 +156,17 @@ const App = () => {
             <AuthHOC restrictedPaths={restrictedPaths}>
             <ELayout>
               <ApplicantsForJob />
+            </ELayout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+          path="/scheduledinterviews"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>
+              <ScheduledInterviews />
             </ELayout>
             </AuthHOC>
           }

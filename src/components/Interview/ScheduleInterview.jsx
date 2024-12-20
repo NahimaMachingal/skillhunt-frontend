@@ -5,6 +5,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { scheduleInterview } from "../../features/interview/interviewSlice";
 
 
+
 const ScheduleInterview = () => {
   const { applicantId } = useParams();
   const dispatch = useDispatch();
@@ -90,6 +91,7 @@ const ScheduleInterview = () => {
             className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100"
           />
         </div>
+        
       <div>
           <label className="block text-sm font-medium text-gray-700">Job Title</label>
           <input

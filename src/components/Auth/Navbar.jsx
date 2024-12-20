@@ -4,12 +4,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { logoutUser } from '../../features/auth/authApi';
+import NotificationList from '../NotificationList';
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [settingsOpen, setSettingsOpen] = useState(false); // State to toggle dropdown
 
+
+  
   const handleLogout = () => {
     // Dispatch the logout action
     dispatch(logoutUser());
@@ -27,7 +30,7 @@ const Navbar = () => {
           <h3>SKILLHUNT</h3>
         </div>
         {/* Navigation Links */}
-        <div className="flex space-x-4">
+        <div className="flex items-center space-x-6">
           <Link to="/home" className="text-white hover:text-gray-200">
             Jobseeker Home
           </Link>
@@ -37,13 +40,13 @@ const Navbar = () => {
           
           <button
             onClick={toggleSettings}
-            className="text-white hover:text-gray-200"
+            className="text-white hover:text-gray-200 relative"
           >
             Settings
           </button>
           {/* Dropdown Menu for Settings */}
           {settingsOpen && (
-            <div className="absolute right-0 mt-11 w-40 bg-white rounded-md shadow-lg">
+            <div className="absolute right-10 mt-2 w-40 bg-white rounded-md shadow-lg z-50">
               <Link
                 to="/jobseeker/jobseekerprofile"
                 className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
@@ -60,6 +63,7 @@ const Navbar = () => {
               </Link>
             </div>
           )}
+          <NotificationList />
           <Link to="/chat" className="text-white hover:text-gray-200">Chat</Link>
           <button
             onClick={handleLogout}

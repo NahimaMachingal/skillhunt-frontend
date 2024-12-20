@@ -124,6 +124,29 @@ export const sendMessage = createAsyncThunk(
   }
 );
 
+// Update last message for a chat room
+export const updateLastMessage = createAsyncThunk(
+  'chat/updateLastMessage',
+  async ({ chatRoomId, messageId }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const accessToken = state.auth.accessToken;  // Get accessToken from Redux store
+      const response = await axios.put(
+        `${API_URL}/chatrooms/${chatRoomId}/update_last_message/`,
+        { message_id: messageId },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const chatSlice = createSlice({
   name: 'chat',
   initialState: {
@@ -170,7 +193,15 @@ const chatSlice = createSlice({
       .addCase(createChatRoom.fulfilled, (state, action) => {
         state.chatRooms.push(action.payload);
         state.currentChatRoom = action.payload;
-      });
+      })
+      .addCase(updateLastMessage.fulfilled, (state, action) => {
+        const updatedRoom = state.chatRooms.find(
+          (room) => room.id === action.payload.chatRoomId
+        );
+        if (updatedRoom) {
+          updatedRoom.lastMessage = action.payload.lastMessage;  // Update the last message
+        }
+      })
   },
 });
 

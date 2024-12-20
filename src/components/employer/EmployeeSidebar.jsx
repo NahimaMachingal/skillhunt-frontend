@@ -47,10 +47,10 @@ const EmployeeSidebar = () => {
         </li>
         <li>
           <Link
-            to={`/employer/jobs/${jobId}/interviews`}
+            to={`/scheduledinterviews`}
             className="block text-white hover:text-gray-300 transition duration-300 rounded-md px-3 py-2 transform hover:scale-105"
           >
-            Applicants for Interview 
+            Scheduled Interviews
           </Link>
         </li>
       </ul>

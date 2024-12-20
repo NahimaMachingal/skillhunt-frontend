@@ -4,11 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { logoutUser } from '../../features/auth/authApi';
+import NotificationList from '../NotificationList';
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [settingsOpen, setSettingsOpen] = useState(false); // State to toggle dropdown
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     
@@ -18,6 +20,9 @@ const Navbar = () => {
   const toggleSettings = () => {
     setSettingsOpen(!settingsOpen);
   };
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
   return (
     <nav className="bg-blue-600 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
@@ -25,21 +30,35 @@ const Navbar = () => {
         <div className="text-white text-xl font-bold">
           
         </div>
+        <button
+          className="text-white md:hidden block"
+          onClick={toggleMenu}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+
         {/* Navigation Links */}
-        <div className="flex space-x-4">
-          <Link to="/ehome" className="text-white hover:text-gray-200">
+        <div
+          className={`flex-col md:flex-row md:flex md:space-x-4 w-full md:w-auto ${
+            menuOpen ? 'flex' : 'hidden'
+          } md:items-center`}
+        >
+          <Link to="/ehome" className="text-white hover:text-gray-200 block px-4 py-2 md:py-0">
             Employer Home
           </Link>
-          
+           {/* Settings Button */}
+           <div className="relative">
           <button
             onClick={toggleSettings}
-            className="text-white hover:text-gray-200"
+            className="text-white hover:text-gray-200 block px-4 py-2 md:py-0"
           >
             Settings
           </button>
           {/* Dropdown Menu for Settings */}
           {settingsOpen && (
-            <div className="absolute right-0 mt-11 w-40 bg-white rounded-md shadow-lg">
+            <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-10">
               <Link
                 to="/employer/employerprofile"
                 className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
@@ -56,10 +75,13 @@ const Navbar = () => {
               </Link>
             </div>
           )}
-           <Link to="/employerchat" className="text-white hover:text-gray-200">Chat</Link>
+          </div>
+          
+           <Link to="/employerchat" className="text-white hover:text-gray-200 block px-4 py-2 md:py-0">Chat</Link>
+           <NotificationList />
           <button
             onClick={handleLogout}
-            className="text-white hover:text-gray-200"
+            className="text-white hover:text-gray-200 block px-4 py-2 md:py-0"
           >
             Logout
           </button>

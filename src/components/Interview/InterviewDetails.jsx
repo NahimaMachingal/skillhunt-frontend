@@ -29,7 +29,7 @@ const InterviewDetails = () => {
     }
 
     if (!jobInterview) {
-        return <p className="text-center text-gray-600 mt-10 text-lg">No interviews found.</p>;
+        return <p className="text-center text-gray-600 mt-10 text-lg">No interviews Scheduled. Will Schedule Soon....</p>;
     }
 
     return (
@@ -54,6 +54,10 @@ const InterviewDetails = () => {
                             </p>
                     )}
                 </div>
+
+                <p className="text-gray-700">
+                        <span className="font-semibold">Interview Location:</span> {jobInterview.location}
+                    </p>
 
                 <div className="mt-6 p-4 bg-red-100 border-l-4 border-red-600 text-red-800 rounded-lg">
                     <p className="text-lg font-semibold">

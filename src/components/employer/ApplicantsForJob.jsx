@@ -14,6 +14,7 @@ const ApplicantsForJob = () => {
   console.log("apppllliccants::",applicants)
   const loading = useSelector((state) => state.job.loading);
   const error = useSelector((state) => state.job.error);
+  
 
   useEffect(() => {
     dispatch(fetchApplicantsForJob(jobId));

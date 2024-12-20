@@ -1,13 +1,9 @@
 //src/components/jobseeker/ChatList.jsx
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchChatRooms, setCurrentChatRoom } from '../../features/chat/chatSlice';
 import { fetchProfile } from '../../features/jobseekerprofile/jobseekerProfileSlice';
-
-
 const ChatList = () => {
-
   const defaultProfileImg = '/profile.jpg';
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -20,18 +16,13 @@ const ChatList = () => {
   console.log(currentUser,"currentUser")
   const [searchTerm, setSearchTerm] = useState('');
   const currentChatRoom = useSelector((state) => state.chat.currentChatRoom);
+  useEffect(() => {
+     dispatch(fetchChatRooms());
+  }, [dispatch]);
   
-
-
   useEffect(() => {
-    dispatch(fetchChatRooms());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchProfile());
-    
-  }, [dispatch]);
-
+    dispatch(fetchProfile());    
+  }, [dispatch]);  
   useEffect(() => {
     if (chatRooms.length && currentChatRoom) {
       const updatedRoom = chatRooms.find(room => room.id === currentChatRoom.id);
@@ -40,10 +31,11 @@ const ChatList = () => {
       }
     }
   }, [chatRooms, currentChatRoom, dispatch]);
- 
+
 
   const filteredChatRooms = chatRooms.filter(room => {
     const otherPerson = room.jobseeker?.id === data?.user?.id ? room.employer : room.jobseeker;
+    
     console.log("jobseeker id is", room.jobseeker.id)
     console.log("room of jobseeker is", room.jobseeker)
     console.log("room of employer is", room.employer)
@@ -52,16 +44,22 @@ const ChatList = () => {
     return otherPerson?.username.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  if (status === 'loading') return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-16 h-16 border-4 border-t-4 border-gray-300 border-solid rounded-full animate-spin border-t-blue-500"></div>
-    </div>
-  );
+  
   
   if (status === 'failed') return <div className="text-red-500 text-center">Error loading chat rooms</div>;
 
+  // Get the profile picture for the other person (employer or jobseeker)
+  const getProfilePic = (room) => {
+    const otherPerson = room.jobseeker.id === data?.user?.id ? room.employer : room.jobseeker;
+    const profilePic = room.jobseeker.id === data?.user?.id
+      ? room.employer_profile_pic
+      : room.jobseeker_profile_pic;
+    return profilePic ? `http://localhost:8000${profilePic}` : defaultProfileImg;
+  };
+
   return (
     <div className="h-screen p-4 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('https://example.com/your-background-image.jpg')` }}>
+      
       <h1 className="text-center text-2xl font-bold text-gray-800 mb-4">Chats</h1>
 
       {/* Search Field */}
@@ -73,23 +71,25 @@ const ChatList = () => {
         className="w-full p-2 mb-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
-      <div className="w-full max-w-md bg-white bg-opacity-80 rounded-lg overflow-auto p-4">
+      <div className="w-full max-w-md mx-auto bg-white bg-opacity-80 rounded-lg overflow-auto p-4 ">
         {filteredChatRooms.map(room => {
-          const otherPerson = room.jobseeker.id === data?.user?.id ? room.employer : room.jobseeker;
-
+          const otherPerson = room.jobseeker.id === data?.user?.id ? room.employer : room.jobseeker;     
           
-
           return (
-            <div key={room.id}>
+            <div key={room.id} className="bg-white shadow-sm rounded-lg mb-4 ">
               <div
                 onClick={() => dispatch(setCurrentChatRoom(room))}
-                className="flex items-center space-x-4 bg-white p-2 mb-2 rounded-lg hover:bg-gray-100 cursor-pointer"
-              >
-                
+                className="flex items-center space-x-4 p-2 mb-2 rounded-lg hover:bg-gray-100 cursor-pointer"
+              >        
+              <img
+                  src={getProfilePic(room)}
+                  alt={`${otherPerson.username}'s profile`}
+                  className="w-12 h-12 rounded-full object-cover border border-gray-300"
+                />       
                 <div className="flex-grow">
-                  <h2 className="font-semibold">{otherPerson.username}</h2>
+                  <h2 className="font-semibold text-sm md:text-base">{otherPerson.username}</h2>
                   {room.last_message && (
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500 md:text-sm">
                       {room.last_message.content.length > 30
                         ? `${room.last_message.content.slice(0, 30)}...`
                         : room.last_message.content}

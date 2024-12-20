@@ -11,6 +11,7 @@ const AppliedCandidates = () => {
   const loading = useSelector((state) => state.job.loading);
   const error = useSelector((state) => state.job.error);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     dispatch(fetchAppliedCandidates());
