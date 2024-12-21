@@ -81,14 +81,20 @@ const NotificationList = () => {
 
     setCurrentNotification(notification);
     setOpen(true);
+console.log("nnnnnnn:", notification.notification_type)
 
+    // Navigate based on notification type
+if (notification.notification_type === 'CHAT') {
+  if (role === 'jobseeker') {
+    navigate('/chat');
+  } else if (role === 'employee') {
+    navigate('/employerchat');
+  }
+} else if (notification.notification_type === 'APPLICATION_STATUS' && role === 'jobseeker') {
+  navigate('/dashboard');
+}
+  }
 
-    if (role === 'jobseeker') {
-      navigate('/chat');
-    } else if (role === 'employee') {
-      navigate('/employerchat');
-    }
-  };
 
   const handleMenuClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget); // Toggle the dropdown visibility
