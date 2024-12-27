@@ -42,6 +42,21 @@ const Dashboard = () => {
                 </div>
             </div>
 
+            <div className="p-6 bg-white flex justify-center mb-6">
+                <div className="bg-blue-600 text-white p-4 rounded-lg shadow-md flex flex-col items-center justify-center w-1/3 mx-2">
+                <Link to="/jobseeker/feedbacks" className="text-white underline">
+  View Feedbacks
+</Link>
+                    
+                </div>
+                <div className="bg-red-600 text-white p-4 rounded-lg shadow-md flex flex-col items-center justify-center w-1/3 mx-2">
+  <Link to="/jobseeker/rejections" className="text-white underline">
+    Rejected
+  </Link>
+</div>
+
+            </div>
+
             {/* Main Content */}
             <main className="flex-1 p-6 bg-white lg:rounded-r-lg shadow-md">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Your Applied Jobs</h2>

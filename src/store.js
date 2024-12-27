@@ -7,6 +7,8 @@ import jobReducer from './features/job/jobSlice';
 import chatReducer from './features/chat/chatSlice';
 import interviewReducer from './features/interview/interviewSlice';
 import notificationReducer from './features/notifications/notificationSlice';
+import resumeReducer from './features/resume/resumeSlice';
+import feedbackReducer from './features/feedback/feedbackSlice'
 
 
 
@@ -18,7 +20,9 @@ const store = configureStore({
     job: jobReducer,
     chat: chatReducer,
     interview: interviewReducer,
-    notifications: notificationReducer,  
+    notifications: notificationReducer, 
+    resume: resumeReducer,
+    feedback: feedbackReducer, 
   },
 });
 

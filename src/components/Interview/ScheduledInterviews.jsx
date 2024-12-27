@@ -24,20 +24,12 @@ const ScheduledInterviews = () => {
       };
 
   useEffect(() => {
-    const jobTitles = new Set();
-    const filteredInterviews = interviews.filter((interview) => {
-      // Exclude interviews where both location and meeting_link are null
-      if (!(interview.location === null && interview.meeting_link === null)) {
-        // Filter out duplicates based on job title
-        if (!jobTitles.has(interview.job_title)) {
-          jobTitles.add(interview.job_title);
-          return true;
-        }
-      }
-      return false;
-    });
-    setUniqueJobTitles(filteredInterviews);
-  }, [interviews]);
+  const filteredInterviews = interviews.filter((interview) => {
+    // Exclude interviews where both location and meeting_link are null
+    return !(interview.location === null && interview.meeting_link === null);
+  });
+  setUniqueJobTitles(filteredInterviews);
+}, [interviews]);
 
   
 

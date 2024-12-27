@@ -44,6 +44,22 @@ import ScheduleInterview from "./components/Interview/ScheduleInterview";
 import InterviewDetails from "./components/Interview/InterviewDetails";
 import ApplicantsForInterview from "./components/Interview/ApplicantsForInterview";
 import ScheduledInterviews from "./components/Interview/ScheduledInterviews";
+import ResumeLanding from "./components/Resume/ResumeLanding";
+import AboutMe from "./components/Resume/AboutMe";
+import Address from "./components/Resume/Address";
+import Skill from "./components/Resume/Skill";
+import Projects from "./components/Resume/Projects";
+import Education from "./components/Resume/Education";
+import Experience from "./components/Resume/Experience"
+import CreateResume from "./components/Resume/CreateResume";
+import InterviewedCandidates from "./components/Interview/InterviewedCandidates";
+import FeedbackForm from "./components/Interview/FeedbackForm";
+import FeedbackReview from "./components/Interview/FeedbackReview";
+import JobseekerFeedback from "./components/jobseeker/JobseekerFeedback";
+import Reason from "./components/employer/Reason";
+import Rejections from "./components/jobseeker/Rejections";
+import JobseekerSubscribe from "./components/jobseeker/JobseekerSubscribe";
+
 
 const App = () => {
   const restrictedPaths = [
@@ -75,6 +91,21 @@ const App = () => {
     "/interview-details/:jobId",
     "/employer/jobs/:jobId/interviews",
     "/scheduledinterviews",
+    "/resumelanding",
+    "/aboutme",
+    "/address",
+    "/skill",
+    "/projects",
+    "/education",
+    "/experience",
+    "/create/resume",
+    "/interviewedcandidates",
+    "/feedback/:interviewId",
+    "/review/:interviewId",
+    "/jobseeker/feedbacks",
+    "/reason/:applicationId",
+    "/jobseeker/rejections",
+    "/jobseekersubscribe",
 
 
     // Add other paths that need authentication here
@@ -108,6 +139,17 @@ const App = () => {
             </AuthHOC>
           }
         />
+
+<Route
+          path="/interviewedcandidates"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>
+              <InterviewedCandidates />
+            </ELayout>
+            </AuthHOC>
+          }
+        />
         <Route
           path="/postjob"
           element={
@@ -124,6 +166,51 @@ const App = () => {
             <AuthHOC restrictedPaths={restrictedPaths}>
             <ELayout>
               <AppliedCandidates />
+            </ELayout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+          path="/feedback/:interviewId"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>
+              <FeedbackForm />
+            </ELayout>
+            </AuthHOC>
+          }
+        />
+        <Route
+          path="/reason/:applicationId"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>
+              <Reason />
+            </ELayout>
+            </AuthHOC>
+          }
+        />
+
+
+<Route
+          path="/jobseeker/rejections"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <Rejections />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+
+<Route
+          path="/review/:interviewId"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>
+              <FeedbackReview />
             </ELayout>
             </AuthHOC>
           }
@@ -234,6 +321,109 @@ const App = () => {
             </AuthHOC>
           }
         />
+        
+
+        <Route
+         path="/jobseekersubscribe"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <JobseekerSubscribe />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+        {/* User Home Route */}
+        <Route
+         path="/jobseeker/feedbacks"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <JobseekerFeedback />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+         path="/aboutme"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <AboutMe />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+
+        <Route
+         path="/address"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <Address />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+         path="/skill"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <Skill />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+        <Route
+         path="/projects"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <Projects />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+         path="/education"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <Education />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+         path="/create/resume"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <CreateResume />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+         path="/experience"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <Experience />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+        
         <Route
          path="/interview-details/:jobId"
           element={
@@ -263,6 +453,19 @@ const App = () => {
             <AuthHOC restrictedPaths={restrictedPaths}>
             <Layout>
               <JobApplicationForm />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+        
+        {/* Resume Route */}
+        <Route
+          path="/resumelanding"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <ResumeLanding />
             </Layout>
             </AuthHOC>
           }

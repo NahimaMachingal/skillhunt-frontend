@@ -3,7 +3,8 @@ import axios from "axios";
 import { loginSuccess, logout } from "./authSlice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const API_URL = "http://localhost:8000/api/";
+const API_URL = `${import.meta.env.VITE_API_URL}`;
+
 
 export const refreshAccessToken = createAsyncThunk(
   "auth/refreshAccessToken", // action type prefix
@@ -16,7 +17,7 @@ export const refreshAccessToken = createAsyncThunk(
         throw new Error("Refresh token not found");
       }
 
-      const response = await axios.post(`${API_URL}api/token/refresh/`, {
+      const response = await axios.post(`${API_URL}/api/token/refresh/`, {
         refresh: refreshToken,
       });
 
@@ -42,7 +43,7 @@ export const refreshAccessToken = createAsyncThunk(
 
 export const googleLogin = (data) => async (dispatch) => {
   try {
-    const response = await axios.post(`${API_URL}google-login/`, data);
+    const response = await axios.post(`${API_URL}/google-login/`, data);
     const {user, user_type, access, refresh } = response.data;
 
     dispatch(loginSuccess({ user: user_type, access, refresh }));
@@ -56,7 +57,7 @@ export const googleLogin = (data) => async (dispatch) => {
 
 export const loginUser = (credentials) => async (dispatch) => {
   try {
-    const response = await axios.post(`${API_URL}login/`, credentials);
+    const response = await axios.post(`${API_URL}/login/`, credentials);
     const {user, user_type, access, refresh } = response.data;
 
     

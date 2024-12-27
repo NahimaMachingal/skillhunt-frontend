@@ -37,7 +37,9 @@ const Navbar = () => {
           <Link to="/dashboard" className="text-white hover:text-gray-200">
             Dashboard
           </Link>
-          
+          <Link to="/resumelanding" className="text-white hover:text-gray-200">
+            Resume
+          </Link>          
           <button
             onClick={toggleSettings}
             className="text-white hover:text-gray-200 relative"
@@ -55,7 +57,7 @@ const Navbar = () => {
                 Profile
               </Link>
               <Link
-                to="/subscribe"
+                to="/jobseekersubscribe"
                 className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                 onClick={() => setSettingsOpen(false)} // Close the dropdown
               >

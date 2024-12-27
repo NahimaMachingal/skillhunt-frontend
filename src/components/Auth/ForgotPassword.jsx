@@ -21,7 +21,8 @@ const ForgotPassword = () => {
   
   const handleSendOTP = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/send-otp/', { email });
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${API_URL}/send-otp/`, { email });
       setSuccess(response.data.message);
       navigate('/reset-password', { state: { email } });
     } catch (error) {

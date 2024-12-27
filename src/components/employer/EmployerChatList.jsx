@@ -52,7 +52,7 @@ const EmployerChatList = () => {
   if (status === 'failed') return <div className="text-red-500 text-center">Error loading chat rooms</div>;
 
   return (
-    <div className="h-screen p-4 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('https://example.com/your-background-image.jpg')` }}>
+    <div className="h-screen w-44 p-4 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('https://example.com/your-background-image.jpg')` }}>
       
       <h1 className="text-center text-2xl font-bold text-gray-800 mb-4">Chats</h1>
 
@@ -80,12 +80,13 @@ const EmployerChatList = () => {
                 <img
                   src={
                     otherPerson?.profile_img
-                    ? `http://localhost:8000${otherPerson.profile_img}`
+                    ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${otherPerson.profile_img}`
                   : defaultProfileImg}
                   alt={otherPerson.username}
                   className="w-12 h-12 rounded-full object-cover border border-gray-300"
                 />  
-                <div className="flex-grow">
+                {/* Username and Last Message */}
+                <div className="hidden xl:flex flex-grow flex-col">
                   <h2 className="font-semibold text-sm md:text-base">{otherPerson.username}</h2>
                   {room.last_message && (
                     <p className="text-xs text-gray-500 md:text-sm">

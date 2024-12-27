@@ -14,6 +14,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('jobseeker'); // Added userType state
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state
   const dispatch = useDispatch();
   const navigate = useNavigate();
  
@@ -32,7 +33,7 @@ const Login = () => {
 
   const handleGoogleLogin = async (response) => {
     const token = response.credential;
-    
+    setLoading(true);
     try {
       const resultAction = await dispatch(googleLogin({ token, user_type: userType }));
       if (resultAction.error) {
@@ -58,6 +59,8 @@ const Login = () => {
     } catch (error) {
       console.error('Error during  login:', error);
       setError('You need to register first to login.');
+    } finally {
+      setLoading(false); // Stop loader after login attempt
     }
   };
   
@@ -67,7 +70,7 @@ const Login = () => {
   
   const handleLogin = async (values) => {
     const { email, password } = values;
-
+    setLoading(true);
     try {
       const resultAction = await dispatch(loginUser({ email, password,  user_type: userType})); // Include user_type in the login request
   
@@ -89,6 +92,8 @@ const Login = () => {
     } catch (error) {
       console.error('Error during login:', error);
       setError('User is not verified');
+    } finally {
+      setLoading(false); // Stop loader after login attempt
     }
   };
 
@@ -152,8 +157,15 @@ const Login = () => {
               </div>
               <a href="/forgotpassword" className="text-purple-500 hover:underline">Forgot Password?</a>
             </div>
-            <button type="submit" className="w-full p-3 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-300">
-              Login
+            <button type="submit" className="w-full p-3 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-300 flex items-center justify-center"
+            disabled={loading}
+            
+            >
+              {loading ? (
+                  <span className="loader animate-spin w-4 h-4 border-2 border-white rounded-full"></span>
+                ) : (
+                  'Login'
+                )}
             </button>
           </Form>
           </Formik>

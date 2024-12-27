@@ -2,7 +2,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/job/'; // Update API_URL for consistency
+const API_URL = `${import.meta.env.VITE_API_URL}/job/`;
+
 
 // Thunk for posting a job
 export const postJob = createAsyncThunk('job/postJob', async (jobData, { getState, rejectWithValue }) => {
@@ -202,6 +203,7 @@ export const fetchAppliedCandidates = createAsyncThunk('job/fetchAppliedCandidat
         const response = await axios.get(`${API_URL}applied-candidates/`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data'
             },
         });
         return response.data;
@@ -243,6 +245,30 @@ export const fetchApplicantsForJob = createAsyncThunk(
       }
     }
   );
+
+  // Thunk to update the reason for an application
+export const updateReason = createAsyncThunk(
+    "job/updateReason",
+    async ({ applicationId, reason }, { getState, rejectWithValue }) => {
+      try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
+        const response = await axios.patch(
+          `${API_URL}application/${applicationId}/reason/`,
+          { reason },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  );
+  
   
 
   // Add this in jobSlice.js
@@ -302,6 +328,23 @@ export const checkIfApplied = createAsyncThunk(
 );
 
 
+export const fetchRejectedJobs = createAsyncThunk(
+    "job/fetchRejectedJobs",
+    async (_, { getState, rejectWithValue }) => {
+      try {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
+        const response = await axios.get(`${API_URL}user/rejected-jobs/`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  );
 
 
 const jobSlice = createSlice({
@@ -314,6 +357,7 @@ const jobSlice = createSlice({
         applicantsForJob: [],
         adminApplications: [],
         adminJobs: [],
+        rejectedJobs: [],
         appliedJobs:[],
         job: null,
         status: 'idle',        
@@ -325,6 +369,17 @@ const jobSlice = createSlice({
     extraReducers: (builder) => {
         // Post Job Cases
         builder
+            .addCase(fetchRejectedJobs.pending, (state) => {
+            state.status = "loading";
+          })
+            .addCase(fetchRejectedJobs.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.rejectedJobs = action.payload;
+          })
+            .addCase(fetchRejectedJobs.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload;
+          })
             .addCase(postJob.pending, (state) => {
                 state.status = 'loading';
                 state.error = null; // Clear any previous error
@@ -521,7 +576,19 @@ const jobSlice = createSlice({
             .addCase(fetchAdminApplications.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
-            });
+            })
+
+            .addCase(updateReason.fulfilled, (state, action) => {
+                const index = state.applicantsForJob.findIndex(
+                  (app) => app.id === action.payload.id
+                );
+                if (index !== -1) {
+                  state.applicantsForJob[index].reason = action.payload.reason;
+                }
+              })
+              .addCase(updateReason.rejected, (state, action) => {
+                state.error = action.payload;
+              });
 
             
     },

@@ -42,7 +42,8 @@ const EmployeeList = () => {
   // Function to toggle user status
   const toggleUserStatus = async (userId) => {
     try {
-      await axios.post(`http://localhost:8000/api/users/toggle-status/${userId}/`);
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.post(`${API_URL}/users/toggle-status/${userId}/`);
       dispatch(fetchUsers()); // Refetch users to update the state
     } catch (error) {
       console.error('Error toggling user status:', error);

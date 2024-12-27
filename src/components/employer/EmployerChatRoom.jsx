@@ -166,7 +166,7 @@ const EmployerChatRoom = () => {
       {/* Header */}
       <div className="flex items-center text-lg font-semibold mb-4 w-full px-4">
       <img
-        src={profilePic ? `http://localhost:8000${profilePic}` : defaultProfileImg}
+        src={profilePic ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${profilePic}` : defaultProfileImg}
         alt={`${otherPerson.username}'s profile`}
         className="w-10 h-10 rounded-full mr-3 object-cover border border-gray-300"
         />
@@ -187,13 +187,29 @@ const EmployerChatRoom = () => {
         {messages.map((message) => (
           <div
             key={message.id || `temp-${message.timestamp}`}
-            className={`max-w-[70%] mb-3 p-3 rounded-lg shadow-md ${message.sender.id === data.user.id ? "bg-green-100 self-end ml-72" : "bg-gray-100 self-start mr-4"} w-5/12`}
+            className={`max-w-[50%] mb-3 p-3 rounded-lg  shadow-md w-10/12 border ${message.sender.id === data.user.id ? "bg-green-100 self-end ml-auto" : "bg-gray-100 self-end mr-auto"}`}
           >
-            <div className="font-medium text-sm">
+            <div 
+            className={`font-medium text-sm ${
+          message.sender.id === data.user.id ? "text-right" : "text-left"
+      }`} >
             {message.sender.id === data.user.id ? "You" : otherPerson.username}
             </div>
-            <div>{message.content || "No content"}</div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div
+            className={`text-sm mt-1 ${
+              message.sender.id === data.user.id ? "text-right" : "text-left"
+            }`}
+          >
+            
+            {message.content || "No content"}
+            </div>
+            <div 
+            className={`text-xs text-gray-500 mt-1 ${
+            message.sender.id === data.user.id ? "text-right" : "text-left"
+      }`}
+    >
+            
+            
               {new Date(message.timestamp).toLocaleString()}
             </div>
           </div>

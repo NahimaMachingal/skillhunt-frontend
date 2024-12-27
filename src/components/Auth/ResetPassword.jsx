@@ -29,7 +29,8 @@ const ResetPassword = () => {
     try {
       setError('');
       setSuccess('');
-      const response = await axios.post('http://localhost:8000/api/reset-password/', { email, otp, new_password: newPassword }
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${API_URL}/reset-password/`, { email, otp, new_password: newPassword }
         
       );
       setSuccess(response.data.message);
@@ -44,7 +45,8 @@ const ResetPassword = () => {
       setError('');
       setSuccess('');
       setResendCooldown(30);
-      await axios.post('http://localhost:8000/api/send-otp/', { email }
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.post(`${API_URL}/send-otp/`, { email }
        
       );
       setSuccess('OTP sent successfully!!');

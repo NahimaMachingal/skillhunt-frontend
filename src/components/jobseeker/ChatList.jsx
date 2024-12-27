@@ -54,7 +54,7 @@ const ChatList = () => {
     const profilePic = room.jobseeker.id === data?.user?.id
       ? room.employer_profile_pic
       : room.jobseeker_profile_pic;
-    return profilePic ? `http://localhost:8000${profilePic}` : defaultProfileImg;
+    return profilePic ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${profilePic}` : defaultProfileImg;
   };
 
   return (
@@ -80,13 +80,15 @@ const ChatList = () => {
               <div
                 onClick={() => dispatch(setCurrentChatRoom(room))}
                 className="flex items-center space-x-4 p-2 mb-2 rounded-lg hover:bg-gray-100 cursor-pointer"
-              >        
+              >  
+                    
               <img
                   src={getProfilePic(room)}
                   alt={`${otherPerson.username}'s profile`}
                   className="w-12 h-12 rounded-full object-cover border border-gray-300"
                 />       
-                <div className="flex-grow">
+                {/* Username and Last Message */}
+                <div className="hidden lg:flex flex-grow flex-col">
                   <h2 className="font-semibold text-sm md:text-base">{otherPerson.username}</h2>
                   {room.last_message && (
                     <p className="text-xs text-gray-500 md:text-sm">

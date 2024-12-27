@@ -14,7 +14,8 @@ const UserVerification = () => {
     const fetchUnverifiedUsers = async () => {
       try {
         if (!accessToken) return;
-        const response = await axios.get('http://localhost:8000/api/unverified-users/', {
+        const API_URL = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${API_URL}/unverified-users/`, {
 
           headers: {
             Authorization: `Bearer ${accessToken}`, // Include the token in the headers
@@ -33,7 +34,8 @@ const UserVerification = () => {
   const handleVerify = async (userId) => {
     try {
       if (!accessToken) return;
-      await axios.post(`http://localhost:8000/api/verify-user/${userId}/`, {}, {
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.post(`${API_URL}/verify-user/${userId}/`, {}, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Include the token in the headers
         },

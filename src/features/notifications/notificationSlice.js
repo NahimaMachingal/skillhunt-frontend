@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/chat'; // Base URL for your API
+const API_URL = `${import.meta.env.VITE_API_URL}/chat`; // Base URL for your API
 
 // Fetch notifications with authorization header
 export const fetchNotifications = createAsyncThunk(

@@ -39,7 +39,7 @@ const JobseekerProfile = () => {
         {/* Left Section - Profile Picture and Basic Info */}
         <div className="col-span-1 text-center border-r">
           <img
-            src={data?.profile_img ? `http://localhost:8000${data.profile_img}` : defaultProfileImg}
+            src={data?.profile_img ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${data.profile_img}` : defaultProfileImg}
             alt="Profile"
             className="w-32 h-32 rounded-full mx-auto mb-4"
           />

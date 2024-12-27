@@ -61,7 +61,7 @@ const ApplicantsForJob = () => {
                   <td className="py-3 px-6">{applicant.questions?.arabic || "N/A"}</td>
                   <td className="py-3 px-6">
                     <a
-                      href={`http://localhost:8000${applicant.resume}`}
+                      href={`${import.meta.env.VITE_API_URL.replace('/api', '')}${applicant.resume}`}
                       className="text-blue-500 hover:text-blue-700 underline"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -75,12 +75,20 @@ const ApplicantsForJob = () => {
                                             value={applicant.status}
                                             onChange={(e) => handleStatusChange(applicant.id, e.target.value)}
                                             className="border border-gray-300 rounded px-2 py-1"
+                                            
                                         >
-                                            <option value="Pending">Pending</option>
-                                            <option value="Reviewed">Reviewed</option>
-                                            <option value="Interview">Interview</option>
-                                            <option value="Accepted">Accepted</option>
-                                            <option value="Rejected">Rejected</option>
+                                            {applicant.status !== "Reviewed" && applicant.status !== "Interview" && applicant.status !== "Accepted"  && (
+                        <option value="Pending" disabled={applicant.status === "Rejected"}>
+                          Pending
+                        </option>
+                      )}
+                                            {applicant.status !== "Interview" && applicant.status !== "Accepted" && (
+                                            <option value="Reviewed" disabled={applicant.status === "Rejected"}>Reviewed</option> )}
+                                            <option value="Interview" disabled={applicant.status === "Rejected"}>Interview</option>
+                                            
+                                            {applicant.status !== "Interview"  && (
+                                            <option value="Accepted" disabled={applicant.status === "Rejected"}>Accepted</option>)}
+                                            <option value="Rejected" disabled={applicant.status === "Rejected"}>Rejected</option>
                                         </select>
                                         <div className="mt-2">
                                         {applicant.status === "Interview" && (
@@ -88,6 +96,16 @@ const ApplicantsForJob = () => {
                                             to={`/schedule/${applicant.id}?job_id=${applicant.job_id}&job_title=${applicant.job_title}&applicant_name=${encodeURIComponent(applicant.applicant_name)}&applicant_email=${encodeURIComponent(applicant.applicant_email)}`} className="text-blue-500 hover:text-blue-700 underline" > Schedule 
                                             </Link> 
                                           )}
+
+
+{applicant.status === "Rejected" && (
+                        <Link
+                          to={`/reason/${applicant.id}`}
+                          className="text-blue-500 hover:text-blue-700 underline"
+                        >
+                          Reason
+                        </Link>
+                      )}
                                           </div>
                                     </td>
                 </tr>

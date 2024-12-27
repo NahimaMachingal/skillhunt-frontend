@@ -31,10 +31,13 @@ const ChatRoom = () => {
   console.log(userid, "ewe");
   const username = useSelector((state) => state.auth.username);
   const [isFetching, setIsFetching] = useState(false);
+  const [page, setPage] = useState(1);  // To track page number for pagination
+  const [hasMoreMessages, setHasMoreMessages] = useState(true); // To track if there are more messages to load
+  const [showLoadButton, setShowLoadButton] = useState(false); // Track whether to show the load button
 
   useEffect(() => {
     if (currentChatRoom && token) {
-      dispatch(fetchMessages(currentChatRoom.id));
+      dispatch(fetchMessages(currentChatRoom.id, page));
       const socket = connectWebSocket(
         currentChatRoom.id,
         (message) => {
@@ -60,7 +63,7 @@ const ChatRoom = () => {
         closeWebSocket();
       };
     }
-  }, [dispatch, currentChatRoom, token]);
+  }, [dispatch, currentChatRoom, token, page]);
 
   useEffect(() => {
     dispatch(fetchProfile());
@@ -68,24 +71,60 @@ const ChatRoom = () => {
 
 
   const fetchMoreMessages = useCallback(() => {
-    if (!isFetching && currentChatRoom) {
+    if (!isFetching && hasMoreMessages) {
+      const container = messagesContainerRef.current;
+      const scrollHeightBefore = container.scrollHeight;
+  
       setIsFetching(true);
-      dispatch(fetchMessages(currentChatRoom.id, true)).finally(() => {
-        setIsFetching(false);
+      setPage((prevPage) => {
+        const newPage = prevPage + 1;
+        dispatch(fetchMessages(currentChatRoom.id, newPage))
+          .then((response) => {
+            if (response.payload.length === 0) {
+              setHasMoreMessages(false);
+            }
+          })
+          .finally(() => {
+            setIsFetching(false);
+            requestAnimationFrame(() => {
+              const scrollHeightAfter = container.scrollHeight;
+              container.scrollTop = scrollHeightAfter - scrollHeightBefore;
+            });
+          });
+        return newPage;
       });
     }
-  }, [dispatch, currentChatRoom, isFetching]);
+  }, [dispatch, currentChatRoom, isFetching, hasMoreMessages]);
+  
+  
 
   const handleScroll = () => {
     const container = messagesContainerRef.current;
-    if (container.scrollTop === 0 && !isFetching) {
-      fetchMoreMessages();
+    
+
+
+    // Show the button only after the user has scrolled to the last 50 messages
+    if (container.scrollTop <=50 && messages.length > 50) {
+      setShowLoadButton(true); // Show load button when scrolled to top and more than 50 messages
+    } else {
+      setShowLoadButton(false); // Hide load button when not at the top
     }
+
+    
   };
+
+  // Automatically scroll to the bottom whenever messages change
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight; // Scroll to the bottom
+    }
+  }, [messages]);
+  
 
   useEffect(() => {
     const container = messagesContainerRef.current;
-    if (container && messages.length > 4) {
+    if (container) {
       container.addEventListener("scroll", handleScroll);
       return () => {
         container.removeEventListener("scroll", handleScroll);
@@ -93,12 +132,7 @@ const ChatRoom = () => {
     }
   }, [handleScroll]);
 
-  useEffect(() => {
-    const container = messagesContainerRef.current;
-    if (container && messages.length > 4 ) {
-      container.scrollTop = container.scrollHeight;
-    }
-  }, [messages]);
+  
 
   
   const handleSendMessage = (e) => {
@@ -162,7 +196,7 @@ const ChatRoom = () => {
       {/* Header */}
       <div className="flex items-center text-lg font-semibold mb-4 w-full px-4">
           <img
-        src={profilePic ? `http://localhost:8000${profilePic}` : defaultProfileImg}
+        src={profilePic ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${profilePic}` : defaultProfileImg}
         alt={`${otherPerson.username}'s profile`}
         className="w-10 h-10 rounded-full mr-3 object-cover border border-gray-300"
         />
@@ -176,28 +210,46 @@ const ChatRoom = () => {
         className="w-full flex-grow overflow-y-auto bg-white p-4 rounded-lg mb-4 border border-gray-300"
         style={{ height: "350px" }} // Set a fixed height for the messages container
       >
-        {isFetching  && messages.length > 4 && (
-          <div className="text-center text-sm text-gray-500 mb-2">
-            Loading more messages...
-          </div>
+        {hasMoreMessages && !isFetching && (
+          <button
+            onClick={fetchMoreMessages}
+            className="text-teal-500 mt-2 text-sm hover:underline"
+          >
+            Load previous messages
+          </button>
         )}
         {messages.map((message) => (
           <div
             key={message.id || `temp-${message.timestamp}`}
-            className={`max-w-[70%] mb-3 p-3 rounded-lg shadow-md ${message.sender.id === data.user.id ? "bg-green-100 self-end ml-72" : "bg-gray-100 self-start mr-10"} w-5/12`}
+            className={`max-w-[50%] mb-3 p-3 rounded-lg shadow-md w-10/12 border ${message.sender.id === data.user.id ? "bg-green-100 self-end ml-auto" : "bg-gray-100 self-end mr-auto"} `}
           >
-            <div className="font-medium text-sm">
-              {message.sender.id === data.user.id ? "You"  : otherPerson.username}
-            </div>
-            <div className="text-sm mt-1">{message.content || "No content"}</div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div
+      className={`font-medium text-sm ${
+        message.sender.id === data.user.id ? "text-right" : "text-left"
+      }`}
+    >
+      {message.sender.id === data.user.id ? "You" : otherPerson.username}
+    </div>
+    <div
+      className={`text-sm mt-1 ${
+        message.sender.id === data.user.id ? "text-right" : "text-left"
+      }`}
+    >
+      {message.content || "No content"}
+    </div>
+    <div
+      className={`text-xs text-gray-500 mt-1 ${
+        message.sender.id === data.user.id ? "text-right" : "text-left"
+      }`}
+    >
               {new Date(message.timestamp).toLocaleString()}
             </div>
           </div>
         ))}
+        
       </div>
 
-      <div className="w-full mt-4">
+      <div className="bg-white p-4 shadow-inner">
         <form
           onSubmit={handleSendMessage}
           className="flex items-center space-x-2"

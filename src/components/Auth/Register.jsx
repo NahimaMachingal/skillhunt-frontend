@@ -49,7 +49,8 @@ const Register = () => {
   
   const handleSubmit = async (values) => {
     try {
-      await axios.post('http://localhost:8000/api/register/', values);
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.post(`${API_URL}/register/`, values);
       localStorage.setItem('email', values.email); // Save email in localStorage
       navigate('/verify-otp');
     } catch (error) {
