@@ -5,6 +5,7 @@ import { postJob } from '../../features/job/jobSlice';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { PulseLoader } from 'react-spinners'; 
 
 const PostJob = () => {
     
@@ -13,6 +14,8 @@ const PostJob = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { status, error } = useSelector((state) => state.job);
+    const [isSubmitting, setIsSubmitting] = useState(false);  // Track submitting state
+
 
     const validationSchema = Yup.object({
         title: Yup.string().required('Job title is required'),
@@ -34,12 +37,13 @@ const PostJob = () => {
     
 
     const handleSubmit = (values) => {
-       
+        setIsSubmitting(true); 
         
         dispatch(postJob(values)).then((result) => {
             if (result.type === 'job/postJob/fulfilled') {
                 navigate('/jobs');
             }
+            setIsSubmitting(false);
         });
     
     };
@@ -327,10 +331,18 @@ const PostJob = () => {
     />
 </div>
 </div>
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 active:bg-blue-700 transition duration-150">
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 active:bg-blue-700 transition duration-150"
                
-                    Post Job
-                </button>
+               disabled={isSubmitting}  // Disable button when submitting
+               >
+                   {isSubmitting ? (
+                       <div className="flex justify-center">
+                           <PulseLoader color="#fff" size={10} />  {/* Replace with your preferred loader */}
+                       </div>
+                   ) : (
+                       "Post Job"
+                   )}
+               </button>
             </Form>
             </Formik>
         </div>

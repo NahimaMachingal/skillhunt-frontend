@@ -17,10 +17,7 @@ const JobDetail = () => {
         dispatch(fetchJobById(jobId));
     }, [dispatch, jobId]);
 
-    if (status === 'loading') {
-        return <p className="text-lg text-gray-500">Loading...</p>;
-    }
-
+    
     if (status === 'failed') {
         return <p className="text-lg text-red-500">Error: {error}</p>;
     }

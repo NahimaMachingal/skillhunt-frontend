@@ -14,6 +14,8 @@ import {
 } from "../../utils/notificationWebSocket";
 import { fetchProfile } from "../../features/employerprofile/employerProfileSlice";
 import { fetchChatRooms } from "../../features/chat/chatSlice";
+import EmojiPicker from "emoji-picker-react";
+
 
 const EmployerChatRoom = () => {
   const dispatch = useDispatch();
@@ -31,6 +33,9 @@ const EmployerChatRoom = () => {
   console.log(userid, "ewe");
   const username = useSelector((state) => state.auth.username);
   const [isFetching, setIsFetching] = useState(false);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  
+
 
   useEffect(() => {
     if (currentChatRoom && token) {
@@ -100,7 +105,10 @@ const EmployerChatRoom = () => {
     }
   }, [messages]);
 
-  
+  const handleEmojiClick = (emojiObject) => {
+    setNewMessage((prev) => prev + emojiObject.emoji);
+    setIsEmojiPickerOpen(false); // Close the emoji picker after selecting an emoji
+  };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -217,7 +225,7 @@ const EmployerChatRoom = () => {
         
       </div>
 
-      <div className="w-full mt-4">
+      <div className="w-full mt-4 relative">
         <form
           onSubmit={handleSendMessage}
           className="flex items-center space-x-2"
@@ -230,12 +238,24 @@ const EmployerChatRoom = () => {
             className="flex-grow p-3 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
           />
           <button
+            type="button"
+            onClick={() => setIsEmojiPickerOpen((prev) => !prev)}
+            className="bg-gray-300 p-2 rounded-md text-sm relative"
+          >
+            😊
+          </button>
+          <button
             type="submit"
             className="bg-teal-500 text-white py-2 px-5 rounded-md text-sm hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400"
           >
             Send
           </button>
         </form>
+        {isEmojiPickerOpen && (
+                  <div className="absolute bottom-full left-0 transform translate-y-2 bg-white p-2 rounded-md shadow-lg z-10">
+                    <EmojiPicker onEmojiClick={handleEmojiClick} />
+                  </div>
+                )}
       </div>
     </div>
   );

@@ -28,9 +28,7 @@ const AdminAppliedJobs = () => {
         dispatch(fetchAdminApplications());
     }, [dispatch]);
 
-    if (status === 'loading') {
-        return <p className="text-center text-gray-600">Loading...</p>;
-    }
+    
 
     if (status === 'failed') {
         return <p className="text-center text-red-600">Error: {error}</p>;

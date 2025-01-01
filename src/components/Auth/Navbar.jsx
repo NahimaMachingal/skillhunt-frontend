@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { logoutUser } from "../../features/auth/authApi";
 import NotificationList from "../NotificationList";
+import { fetchProfile } from "../../features/jobseekerprofile/jobseekerProfileSlice";
+
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { data, status, error } = useSelector((state) => state.profile);
+  console.log("useee:", data)
   const [settingsOpen, setSettingsOpen] = useState(false); // State to toggle dropdown
   const [menuOpen, setMenuOpen] = useState(false); // State for mobile menu
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+
+
+  
+  useEffect(() => {
+      dispatch(fetchProfile());
+    }, [dispatch]);
+
 
   const handleLogout = () => {
     dispatch(logoutUser());
     navigate("/login");
   };
+
+
 
   const toggleSettings = () => {
     setSettingsOpen(!settingsOpen);
@@ -72,7 +87,7 @@ const Navbar = () => {
             Dashboard
           </Link>
           <Link
-            to="/resumelanding"
+            to={data?.user?.is_subscribed ? "/resumelanding" : "/jobseekersubscribe"}
             className="block md:inline-block px-4 py-2 text-gray-800 hover:text-blue-600 transition duration-300"
             onClick={() => setMenuOpen(false)}
           >

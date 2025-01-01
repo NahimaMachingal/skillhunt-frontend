@@ -32,9 +32,7 @@ const AdminJobList = () => {
   };
 
   let content;
-  if (status === 'loading') {
-    content = <p className="text-lg text-gray-600">Loading jobs...</p>;
-  } else if (status === 'succeeded') {
+   if (status === 'succeeded') {
     content = (
       <table className="min-w-full bg-white border border-gray-300">
         <thead>

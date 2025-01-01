@@ -7,6 +7,7 @@ import { fetchProfile, updateProfile } from '../../features/jobseekerprofile/job
 const JProfileEdit = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // Loading state
   const { data: profileData } = useSelector((state) => state.profile);
 
   const [formData, setFormData] = useState({
@@ -71,18 +72,21 @@ const JProfileEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const updatedData = new FormData();
     for (const key in formData) {
       if (Array.isArray(formData[key])) {
         formData[key].forEach((item) => updatedData.append(key, item));
       } else {
         updatedData.append(key, formData[key]);
+        setLoading(false);
       }
     }
 
     // Append the visible_applications as a JSON string
     updatedData.append('visible_applications', JSON.stringify(formData.visible_applications));
     await dispatch(updateProfile(updatedData));
+    setLoading(false);
     navigate('/jobseeker/jobseekerprofile');
   };
 
@@ -198,8 +202,15 @@ const JProfileEdit = () => {
           </div>
         </div>
         <div className="mt-6">
-          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
-            Save Changes
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded"
+          disabled={loading}
+          aria-busy={loading}
+          >
+            {loading ? (
+                  <span className="loader animate-spin w-4 h-4 border-2 border-white rounded-full"></span>
+                ) : (
+            'Save Changes'
+          )}
           </button>
         </div>
       </form>

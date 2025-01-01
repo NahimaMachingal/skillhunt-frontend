@@ -20,10 +20,7 @@ const PendingJobs = () => {
     console.log('Status:', status);
     console.log('Filtered Pending Jobs:', filteredPendingJobs);
 
-    // Conditional rendering based on the status and error state
-    if (status === 'loading') {
-        return <div className="container mx-auto p-4 text-lg text-gray-500">Loading...</div>;
-    }
+    
 
     if (status === 'failed') {
         return <div className="container mx-auto p-4 text-lg text-red-500">Error: {error || 'Failed to load pending jobs'}</div>;

@@ -54,7 +54,7 @@ const AdminHome = () => {
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 p-6">
       <h1 className="text-4xl font-bold text-cyan-800 mb-6">Admin Dashboard</h1>
 
-      {loading && <p className="text-lg text-gray-600">Loading users...</p>}
+      
       {error && <p className="text-lg text-red-500">Error: {error}</p>}
       
       <div className="w-11/12 bg-white shadow-md rounded-lg p-6">

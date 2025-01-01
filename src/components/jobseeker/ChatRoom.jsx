@@ -38,6 +38,17 @@ const ChatRoom = () => {
   const [showLoadButton, setShowLoadButton] = useState(false); // Track whether to show the load button
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
+
+  useEffect(() => {
+    // Show load button if the message count exceeds 50
+    if (messages.length > 50) {
+      setShowLoadButton(true);
+    } else {
+      setShowLoadButton(false);
+    }
+  }, [messages]); 
+
+
   useEffect(() => {
     if (currentChatRoom && token) {
       dispatch(fetchMessages(currentChatRoom.id, page));
@@ -196,6 +207,9 @@ const ChatRoom = () => {
     console.log(profilePic,":reciever profile picture 2")
     const defaultProfileImg = '/profile.jpg';
 
+
+// Disable the send button if the user is not subscribed and there are more than 5 messages
+const isSendButtonDisabled = !data?.user?.is_subscribed && messages.length > 5;
     
   return (
     <div className="flex flex-col items-center p-4 bg-gray-100 w-full max-w-4xl mx-auto rounded-xl shadow-lg">
@@ -215,15 +229,17 @@ const ChatRoom = () => {
         ref={messagesContainerRef}
         className="w-full flex-grow overflow-y-auto bg-white p-4 rounded-lg mb-4 border border-gray-300"
         style={{ height: "350px" }} // Set a fixed height for the messages container
-      >
-        {hasMoreMessages && !isFetching && (
-          <button
-            onClick={fetchMoreMessages}
-            className="text-teal-500 mt-2 text-sm hover:underline"
-          >
-            Load previous messages
-          </button>
-        )}
+      onScroll={handleScroll} // Add the scroll handler to the container
+    >
+      {/* Only show the button if the message count is greater than 50 */}
+      {showLoadButton && !isFetching && (
+        <button
+          onClick={fetchMoreMessages}
+          className="text-teal-500 mt-2 text-sm hover:underline"
+        >
+          Load previous messages
+        </button>
+      )}
         {messages.map((message) => (
           <div
             key={message.id || `temp-${message.timestamp}`}
@@ -276,11 +292,16 @@ const ChatRoom = () => {
             😊
           </button>
           <button
-            type="submit"
-            className="bg-teal-500 text-white py-2 px-5 rounded-md text-sm hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400"
-          >
-            Send
-          </button>
+  type="submit"
+  className={`${
+    isSendButtonDisabled
+      ? "bg-gray-400 text-gray-500 cursor-not-allowed"
+      : "bg-teal-500 text-white hover:bg-teal-600 focus:ring-2 focus:ring-teal-400"
+  } py-2 px-5 rounded-md text-sm focus:outline-none`}
+  disabled={isSendButtonDisabled}
+>
+  {isSendButtonDisabled ? "Subscribe" : "Send"}
+</button>
         </form>
         {isEmojiPickerOpen && (
           <div className="absolute bottom-full left-0 transform translate-y-2 bg-white p-2 rounded-md shadow-lg z-10">
