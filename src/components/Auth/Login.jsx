@@ -51,7 +51,7 @@ const Login = () => {
         // Existing login success logic remains the same
         if (resultAction.user_type) {
           if (resultAction.user_type === 'jobseeker') {
-            navigate('/home');
+            navigate('/mainhome');
           } else if (resultAction.user_type === 'employee') {
             navigate('/ehome');
           }
@@ -82,7 +82,7 @@ const Login = () => {
         if (userType === 'admin') {
           navigate('/admin/home'); // Redirect to Admin Home
         } else if (userType === 'jobseeker') {
-          navigate('/home'); // Redirect to User Home
+          navigate('/mainhome'); // Redirect to User Home
         } else if (userType === 'employee') {
           navigate('/ehome'); // Redirect to Employee Home
         }

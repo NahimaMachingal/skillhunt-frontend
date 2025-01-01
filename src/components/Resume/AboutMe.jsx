@@ -88,7 +88,7 @@ const AboutMe = () => {
             </ul>
           </div>
 
-          <div className="p-8 flex-1 bg-green-100">
+          <div className="p-8 flex-1 bg-green-100 ">
             <div className="flex justify-between mb-4">
               {['About Me', 'Address', 'Skills', 'Projects', 'Education', 'Experience'].map((step, index) => (
                 <div
@@ -101,10 +101,10 @@ const AboutMe = () => {
                 </div>
               ))}
             </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-3">About Me</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-5">About Me</h2>
             <form className="space-y-3" onSubmit={formik.handleSubmit}>
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">First Name</label>
+                <label className="block text-sm font-medium text-gray-600">First Name</label>
                 <input
                   type="text"
                   name="full_name"
@@ -112,7 +112,7 @@ const AboutMe = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   placeholder="Enter your full name"
-                  className="w-full border rounded-md px-3 py-1 focus:outline-none focus:ring focus:ring-blue-200"
+                  className="w-full border rounded-md px-3 py-1 focus:outline-none focus:ring focus:ring-blue-300"
                 />
                 {formik.touched.full_name && formik.errors.full_name && (
                   <p className="text-red-500 text-sm">{formik.errors.full_name}</p>

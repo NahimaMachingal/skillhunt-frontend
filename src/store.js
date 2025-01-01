@@ -8,9 +8,9 @@ import chatReducer from './features/chat/chatSlice';
 import interviewReducer from './features/interview/interviewSlice';
 import notificationReducer from './features/notifications/notificationSlice';
 import resumeReducer from './features/resume/resumeSlice';
-import feedbackReducer from './features/feedback/feedbackSlice'
-
-
+import feedbackReducer from './features/feedback/feedbackSlice';
+import chatbotReducer from './features/chatbot/chatbotSlice';
+import subscriptionReducer from './features/subscription/subscriptionSlice';
 
 const store = configureStore({
   reducer: {
@@ -23,6 +23,8 @@ const store = configureStore({
     notifications: notificationReducer, 
     resume: resumeReducer,
     feedback: feedbackReducer, 
+    chatbot: chatbotReducer,
+    subscription: subscriptionReducer,
   },
 });
 

@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const JobseekerSubscribe = () => {
+  const navigate = useNavigate();
+
+  const handleSubscribeClick = () => {
+    navigate("/subscriptionform"); // Replace with the correct route for SubscriptionForm
+  };
   return (
     <div className="max-w-4xl mx-auto mt-10 p-8 bg-gradient-to-r from-blue-50 to-green-50 shadow-lg rounded-xl border border-gray-300">
       <h1 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
@@ -36,13 +43,11 @@ const JobseekerSubscribe = () => {
         </li>
       </ul>
       <div className="text-center mb-6">
-        <p className="text-xl font-semibold text-gray-800">
-          Subscription Fee:{" "}
-          <span className="text-green-600 font-bold">$29.99/month</span>
-        </p>
+        
       </div>
       <div className="text-center">
         <button
+          onClick={handleSubscribeClick}
           className="bg-gradient-to-r from-blue-500 to-green-500 text-white px-8 py-3 rounded-lg text-lg font-medium shadow-lg hover:from-blue-600 hover:to-green-600 transform hover:scale-105 transition duration-300 ease-in-out"
         >
           Subscribe Now

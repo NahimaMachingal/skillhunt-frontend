@@ -35,16 +35,28 @@ const CreateResume = () => {
   const handleDownload = async () => {
     const designContainer = document.getElementById("design-preview");
   
-    // Capture the design container as a canvas
-    const canvas = await html2canvas(designContainer, { useCORS: true });
+    // Remove padding and margin from the container before capturing
+  designContainer.style.margin = "0";
+  designContainer.style.padding = "0";
   
+    // Capture the design container as a canvas
+  const canvas = await html2canvas(designContainer, {
+    useCORS: true,
+    x: 0, // Capture from the leftmost part of the container
+    y: 0, // Capture from the topmost part of the container
+    width: designContainer.offsetWidth, // Adjust width to match the container width
+    height: designContainer.offsetHeight, // Adjust height to match the container height
+    scale: 2, // Optional: Increase the scale for higher resolution
+    scrollX: 0,
+    scrollY: -window.scrollY, // Prevent any scroll offset from affecting the canvas
+  });
     // Get image data
     const imgData = canvas.toDataURL("image/png");
   
-    // Define A4 dimensions in millimeters
+    // Define A4 dimensions in millimghteters
     const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = 220; // A4 width in mm
-    const pdfHeight = 250; // A4 height in mm
+    const pdfWidth = 210; // A4 width in mm
+    const pdfHeight = 297; // A4 height in mm
   
     // Directly fit the image to A4 dimensions
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
@@ -95,8 +107,9 @@ const CreateResume = () => {
         <h1 className="text-xl font-bold text-gray-800 mb-4">Design Preview</h1>
         <div
           id="design-preview"
-          className="w-full h-full flex items-center justify-center border border-gray-300 bg-gray-50 p-4"
-        >
+          className="w-full h-full flex items-center justify-center border border-gray-300 bg-gray-50 p-4 overflow-auto"
+          style={{ maxHeight: "calc(250vh - 100px)" }}  // Adjust this value to fit the design
+          >
           {renderSelectedDesign()}
         </div>
       </div>

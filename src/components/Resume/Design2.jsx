@@ -15,7 +15,7 @@ const Design2 = () => {
     if (!data || !data.aboutMe) return <div>No data available</div>; // Add fallback here
 
     return (
-        <div className="w-9/12 mx-auto bg-white shadow-lg mt-11 flex">
+        <div className="w-full mx-auto bg-white shadow-lg mt-11 flex">
             {/* Left Section */}
             <div className="w-1/3 bg-yellow-500 text-white p-6">
                 {/* Profile Picture */}

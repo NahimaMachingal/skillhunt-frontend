@@ -24,7 +24,7 @@ const Navbar = () => {
     setMenuOpen(!menuOpen);
   };
   return (
-    <nav className="bg-blue-600 p-4 shadow-md">
+    <nav className="bg-gray-400 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or Brand Name */}
         <div className="text-white text-xl font-bold">
@@ -66,19 +66,17 @@ const Navbar = () => {
               >
                 Profile
               </Link>
-              <Link
-                to="/subscribe"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                onClick={() => setSettingsOpen(false)} // Close the dropdown
-              >
-                Subscribe
-              </Link>
+              
             </div>
           )}
           </div>
           
            <Link to="/employerchat" className="text-white hover:text-gray-200 block px-4 py-2 md:py-0">Chat</Link>
            <NotificationList />
+
+           <Link to="/employer/chatbot" className="text-white hover:text-gray-200 block px-4 py-2 md:py-0">
+            FAQ
+          </Link>
           <button
             onClick={handleLogout}
             className="text-white hover:text-gray-200 block px-4 py-2 md:py-0"

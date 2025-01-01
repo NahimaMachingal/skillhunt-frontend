@@ -17,7 +17,7 @@ const Design1 = () => {
   if (!data || !data.aboutMe) return <div>No data available</div>; // Add fallback here
 
   return (
-    <div className="w-9/12 mx-auto bg-white shadow-lg mt-11">
+    <div className="w-full mx-auto bg-white shadow-lg mt-11">
       {/* Header Section */}
       <div className="flex">
         <div className="w-1/3 bg-blue-200 p-6">
@@ -51,7 +51,7 @@ const Design1 = () => {
       </div>
 
       {/* Main Sections */}
-      <div className="flex h-[calc(90vh-250px)] overflow-hidden">
+      <div className="flex h-[calc(70vh-40px)] overflow-hidden">
         {/* Left Sidebar */}
         <div className="w-1/3 bg-blue-200 p-6">
           {/* About Me */}

@@ -21,9 +21,6 @@ const EmployerProfile = () => {
     dispatch(fetchProfile());
   }, [dispatch]);
 
-  if (status === 'loading') {
-    return <div className="text-center mt-8">Loading...</div>;
-  }
 
   if (status === 'failed') {
     return <div className="text-center mt-8 text-red-500">Error: {error}</div>;
@@ -34,22 +31,24 @@ const EmployerProfile = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="bg-white shadow-lg rounded-lg p-8 grid grid-cols-3 gap-6">
+      <div className="bg-white shadow-lg rounded-lg p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Section - Profile Picture and Basic Info */}
-        <div className="col-span-1 text-center border-r">
+        <div className="text-center md:border-r md:pr-4">
           <img
             src={data?.profile_img ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${data.profile_img}` : defaultProfileImg}
             alt="Profile"
-            className="w-32 h-32 rounded-full mx-auto mb-4"
+            className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto mb-4"
           />
           <h2 className="text-xl font-bold mb-2">{displayField(data?.user?.username || 'John Doe')}</h2>
           <p className="text-gray-600 mb-4">{displayField(data?.current_job_title || 'Jobseeker')}</p>
+          <div className="flex justify-center space-x-4">
           <button className="bg-blue-500 text-white px-4 py-2 rounded-full mr-2">Follow</button>
           <button className="bg-gray-500 text-white px-4 py-2 rounded-full">Message</button>
         </div>
+        </div>
 
         {/* Middle Section - Contact Information */}
-        <div className="col-span-1 p-4">
+        <div className="p-4">
           <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
           <p><strong>Email: </strong> {displayField(data?.user?.email)}</p>
           <p><strong>Phone Number: </strong> {displayField(data?.phone_number)}</p>

@@ -14,6 +14,8 @@ import {
 } from "../../utils/notificationWebSocket";
 import { fetchProfile } from "../../features/jobseekerprofile/jobseekerProfileSlice";
 import { fetchChatRooms, updateLastMessage } from "../../features/chat/chatSlice";
+import EmojiPicker from "emoji-picker-react";
+
 
 const ChatRoom = () => {
   const dispatch = useDispatch();
@@ -34,6 +36,7 @@ const ChatRoom = () => {
   const [page, setPage] = useState(1);  // To track page number for pagination
   const [hasMoreMessages, setHasMoreMessages] = useState(true); // To track if there are more messages to load
   const [showLoadButton, setShowLoadButton] = useState(false); // Track whether to show the load button
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
   useEffect(() => {
     if (currentChatRoom && token) {
@@ -132,7 +135,10 @@ const ChatRoom = () => {
     }
   }, [handleScroll]);
 
-  
+  const handleEmojiClick = (emojiObject) => {
+    setNewMessage((prev) => prev + emojiObject.emoji);
+    setIsEmojiPickerOpen(false); // Close the emoji picker after selecting an emoji
+  };
 
   
   const handleSendMessage = (e) => {
@@ -249,7 +255,7 @@ const ChatRoom = () => {
         
       </div>
 
-      <div className="bg-white p-4 shadow-inner">
+      <div className="bg-white p-4 shadow-inner relative">
         <form
           onSubmit={handleSendMessage}
           className="flex items-center space-x-2"
@@ -261,6 +267,14 @@ const ChatRoom = () => {
             placeholder="Type a message..."
             className="flex-grow p-3 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
           />
+
+            <button
+            type="button"
+            onClick={() => setIsEmojiPickerOpen((prev) => !prev)}
+            className="bg-gray-300 p-2 rounded-md text-sm relative"
+          >
+            😊
+          </button>
           <button
             type="submit"
             className="bg-teal-500 text-white py-2 px-5 rounded-md text-sm hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400"
@@ -268,6 +282,11 @@ const ChatRoom = () => {
             Send
           </button>
         </form>
+        {isEmojiPickerOpen && (
+          <div className="absolute bottom-full left-0 transform translate-y-2 bg-white p-2 rounded-md shadow-lg z-10">
+            <EmojiPicker onEmojiClick={handleEmojiClick} />
+          </div>
+        )}
       </div>
     </div>
   );

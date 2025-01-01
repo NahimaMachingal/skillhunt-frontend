@@ -17,8 +17,13 @@ const EmployeeSidebar = () => {
 
   return (
     <div className="bg-gradient-to-b from-gray-700 to-gray-500 p-6 shadow-lg min-h-screen">
-      <div className="text-white text-3xl font-bold mb-8 text-center">
-        SKILLHUNT EMPLOYEE
+      <div className="flex text-white text-3xl font-semibold mb-8 text-center">
+      <img
+            src="/kk.png"
+            alt="SkillHunt Logo"
+            className="h-12 w-12  rounded-full mr-3 hidden lg:block"
+          />
+        SkillHunt 
       </div>
       <ul className="space-y-5">
         <li>

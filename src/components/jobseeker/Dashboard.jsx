@@ -13,9 +13,7 @@ const Dashboard = () => {
         dispatch(fetchUserAppliedJobs());
     }, [dispatch]);
 
-    if (status === 'loading') {
-        return <p className="text-center text-gray-600 mt-10 text-lg">Loading...</p>;
-    }
+    
 
     if (status === 'failed') {
         return <p className="text-center text-red-600 mt-10 text-lg">Error: {error}</p>;

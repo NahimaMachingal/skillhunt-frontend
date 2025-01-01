@@ -1,5 +1,5 @@
 // src/components/jobseeker/JobseekerProfile.jsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile } from '../../features/jobseekerprofile/jobseekerProfileSlice';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ const defaultProfileImg = '/profile.jpg';
 const JobseekerProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isFollowed, setIsFollowed] = useState(false); // State to track follow status
   const { data, status, error } = useSelector((state) => state.profile);
   console.log(data,"data");
 
@@ -18,13 +19,20 @@ const JobseekerProfile = () => {
     navigate('/jobseeker/jprofileedit');
   }
 
+  const handleFollowClick = () => {
+    // Toggle the follow state
+    setIsFollowed(!isFollowed);
+  };
+
+  const handleMessage = () => {
+    navigate('/chat')
+  };
+
   useEffect(() => {
     dispatch(fetchProfile());
   }, [dispatch]);
 
-  if (status === 'loading') {
-    return <div className="text-center mt-8">Loading...</div>;
-  }
+  
 
   if (status === 'failed') {
     return <div className="text-center mt-8 text-red-500">Error: {error}</div>;
@@ -35,9 +43,9 @@ const JobseekerProfile = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="bg-white shadow-lg rounded-lg p-8 grid grid-cols-3 gap-6">
+      <div className="bg-white shadow-lg rounded-lg p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Left Section - Profile Picture and Basic Info */}
-        <div className="col-span-1 text-center border-r">
+        <div className="col-span-1 text-center border-b sm:border-b-0 sm:border-r lg:border-b-0 lg:border-r">
           <img
             src={data?.profile_img ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${data.profile_img}` : defaultProfileImg}
             alt="Profile"
@@ -45,8 +53,15 @@ const JobseekerProfile = () => {
           />
           <h2 className="text-xl font-bold mb-2">{displayField(data?.user?.username || 'John Doe')}</h2>
           <p className="text-gray-600 mb-4">{displayField(data?.current_job_title || 'Jobseeker')}</p>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-full mr-2">Follow</button>
-          <button className="bg-gray-500 text-white px-4 py-2 rounded-full">Message</button>
+          <button
+            onClick={handleFollowClick}
+            className={`px-4 py-2 rounded-full mr-2 ${isFollowed ? 'bg-gray-500' : 'bg-blue-500'} text-white`}
+          >
+            {isFollowed ? 'Followed' : 'Follow'}
+          </button>
+          <button 
+          onClick={handleMessage}
+          className="bg-gray-500 text-white px-4 py-2 rounded-full">Message</button>
         </div>
 
         {/* Middle Section - Contact Information */}
@@ -57,7 +72,7 @@ const JobseekerProfile = () => {
           <p><strong>Date of Birth: </strong> {displayField(data?.date_of_birth)}</p>
           <p><strong>Place: </strong> {displayField(data?.place)}</p>
           
-          <button  onClick={handleEditClick} className="mt-4 bg-green-500 text-white px-4 py-2 rounded-full">Edit</button>
+          <button onClick={handleEditClick} className="mt-4 bg-green-500 text-white px-4 py-2 rounded-full">Edit</button>
         </div>
 
         {/* Right Section - Social Links and Bio */}

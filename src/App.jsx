@@ -59,6 +59,11 @@ import JobseekerFeedback from "./components/jobseeker/JobseekerFeedback";
 import Reason from "./components/employer/Reason";
 import Rejections from "./components/jobseeker/Rejections";
 import JobseekerSubscribe from "./components/jobseeker/JobseekerSubscribe";
+import JobseekerChatbot from "./components/jobseeker/JobseekerChatbot";
+import EmployerChatbot from "./components/employer/EmployerChatbot";
+import SubscriptionForm from "./components/jobseeker/SubsciptionForm";
+import PaymentSuccess from "./components/jobseeker/PaymentSuccess";
+import MainHome from "./components/jobseeker/MainHome";
 
 
 const App = () => {
@@ -106,6 +111,11 @@ const App = () => {
     "/reason/:applicationId",
     "/jobseeker/rejections",
     "/jobseekersubscribe",
+    "/jobseeker/chatbot",
+    "/employer/chatbot",
+    "/subscriptionform",
+    "/payment-success",
+    "/mainhome",
 
 
     // Add other paths that need authentication here
@@ -136,6 +146,17 @@ const App = () => {
             <ELayout>
               <EmployerProfile />
             </ELayout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+          path="/mainhome"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <MainHome />
+            </Layout>
             </AuthHOC>
           }
         />
@@ -310,6 +331,17 @@ const App = () => {
           }
         />
 
+<Route
+          path="/employer/chatbot"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <ELayout>
+              <EmployerChatbot />
+            </ELayout>
+            </AuthHOC>
+          }
+        />
+
          {/* User Home Route */}
          <Route
          path="/home"
@@ -375,6 +407,39 @@ const App = () => {
             <AuthHOC restrictedPaths={restrictedPaths}>
             <Layout>
               <Skill />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+
+<Route
+         path="/payment-success"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <PaymentSuccess />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+
+<Route
+         path="/subscriptionform"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <SubscriptionForm />
+            </Layout>
+            </AuthHOC>
+          }
+        />
+<Route
+         path="/jobseeker/chatbot"
+          element={
+            <AuthHOC restrictedPaths={restrictedPaths}>
+            <Layout>
+              <JobseekerChatbot />
             </Layout>
             </AuthHOC>
           }

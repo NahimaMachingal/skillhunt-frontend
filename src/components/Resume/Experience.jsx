@@ -140,7 +140,7 @@ const Experience = () => {
                     name="start_date"
                     value={formData.start_date}
                     onChange={handleChange}
-                    className="w-full border rounded-md px-3 py-1 h-24 focus:outline-none focus:ring focus:ring-blue-200"
+                    className="w-full border rounded-md px-3 py-1 focus:outline-none focus:ring focus:ring-blue-200"
                 />
               </div>
               <div>
@@ -151,7 +151,7 @@ const Experience = () => {
                     name="end_date"
                     value={formData.end_date}
                     onChange={handleChange}
-                    className="w-full border rounded-md px-3 py-1 h-24 focus:outline-none focus:ring focus:ring-blue-200"
+                    className="w-full border rounded-md px-3 py-1 focus:outline-none focus:ring focus:ring-blue-200"
                     />
                   </div>
                   <div>
