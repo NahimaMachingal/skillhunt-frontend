@@ -176,30 +176,7 @@ const JProfileEdit = () => {
             />
           </div>
           
-          <div className="col-span-2">
-            <label>Visible Applications:</label>
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  value="Application1"
-                  checked={formData.visible_applications.includes('Application1')}
-                  onChange={handleVisibleApplicationsChange}
-                />
-                Application1
-              </label>
-              <label className="ml-4">
-                <input
-                  type="checkbox"
-                  value="Application2"
-                  checked={formData.visible_applications.includes('Application2')}
-                  onChange={handleVisibleApplicationsChange}
-                />
-                Application2
-              </label>
-              {/* Add more checkboxes as needed */}
-            </div>
-          </div>
+          
         </div>
         <div className="mt-6">
           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded"
