@@ -17,8 +17,7 @@ export const connectNotificationWebSocket = (token, userId, dispatch) => {
     return notificationSocket;
   }
 
-   notificationSocket = new WebSocket(`ws://127.0.0.1:8000/ws/notifications/${userId}/?token=${token}`);
-
+   notificationSocket = new WebSocket(`wss://api.skillhuntbackbynahima.online/ws/notifications/${userId}/?token=${token}`);
 
   notificationSocket.onopen = () => {
     console.log('Notification WebSocket connection established.');
