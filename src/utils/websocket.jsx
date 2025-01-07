@@ -16,7 +16,7 @@ export const connectWebSocket = (roomId, onMessageReceived, token) => {
   }
 
 
-  socket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomId}/?token=${token}`);
+  socket = new WebSocket(`wss://api.skillhuntbackbynahima.online/ws/chat/${roomId}/?token=${token}`);
 
 
   socket.onopen = () => {
