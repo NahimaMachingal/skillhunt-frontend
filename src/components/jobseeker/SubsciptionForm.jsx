@@ -49,7 +49,7 @@ const SubscriptionForm = () => {
 
           await dispatch(verifyPayment(paymentData));
           // After successful payment verification, navigate to the payment success page
-          navigate("/payment-success");
+          
         },
         modal: {
           ondismiss: function() {
