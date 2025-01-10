@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const PaymentSuccess = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">
       <div className="bg-white p-10 rounded-2xl shadow-2xl max-w-md text-center">
@@ -28,7 +30,7 @@ const PaymentSuccess = () => {
         </p>
         <button
           className="mt-8 w-full py-3 bg-gradient-to-r from-blue-500 to-green-500 text-white font-semibold rounded-lg shadow-lg hover:opacity-90 transition-opacity"
-          onClick={() => (window.location.href = "/dashboard")}
+          onClick={() =>  navigate("/dashboard")}
         >
           Go to Dashboard
         </button>
