@@ -5,7 +5,7 @@ import { fetchProfile } from '../../features/jobseekerprofile/jobseekerProfileSl
 import { useNavigate } from 'react-router-dom';
 
 // Default profile image placeholder
-const defaultProfileImg = '/profile.jpg';
+const defaultProfileImg = '/sp.webp';
 
 const JobseekerProfile = () => {
   const navigate = useNavigate();
