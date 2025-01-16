@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchResumeData } from "../../features/resume/resumeSlice"; // Assuming a fetchResumeData action is created
+const defaultProfileImg = '/sp.webp';
 
 const Design2 = () => {
     const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const Design2 = () => {
   src={
     data?.aboutMe.profile_pic
       ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${data.aboutMe.profile_pic}`
-      : "https://via.placeholder.com/150"
+      : defaultProfileImg
   }
   alt="Profile"
   className="w-32 h-32 rounded-full mx-auto"
