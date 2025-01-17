@@ -23,11 +23,7 @@ const Design1 = () => {
       <div className="flex">
         <div className="w-1/3 bg-blue-200 p-6">
         <img
-  src={
-    data?.aboutMe.profile_pic
-      ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${data.aboutMe.profile_pic}`
-      : defaultProfileImg 
-  }
+  src={defaultProfileImg}
   alt="Profile"
   className="w-32 h-32 rounded-full mx-auto"
   crossOrigin="anonymous"
