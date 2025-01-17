@@ -21,11 +21,7 @@ const Design2 = () => {
             <div className="w-1/3 bg-yellow-500 text-white p-6">
                 {/* Profile Picture */}
                 <img
-  src={
-    data?.aboutMe.profile_pic
-      ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${data.aboutMe.profile_pic}`
-      : defaultProfileImg
-  }
+  src={defaultProfileImg}
   alt="Profile"
   className="w-32 h-32 rounded-full mx-auto"
   crossOrigin="anonymous"
