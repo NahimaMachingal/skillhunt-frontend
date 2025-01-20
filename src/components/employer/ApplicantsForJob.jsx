@@ -61,7 +61,7 @@ const ApplicantsForJob = () => {
                   <td className="py-3 px-6">{applicant.questions?.arabic || "N/A"}</td>
                   <td className="py-3 px-6">
                     <a
-                      href={`${import.meta.env.VITE_API_URL.replace(/\.skillhuntbackbynahima\.online\/api/, 'api.skillhuntbackbynahima.online')}/media${applicant.resume}`}
+                      href={`https://api.skillhuntbackbynahima.online/media${applicant.resume}`}
                       className="text-blue-500 hover:text-blue-700 underline"
                       target="_blank"
                       rel="noopener noreferrer"
