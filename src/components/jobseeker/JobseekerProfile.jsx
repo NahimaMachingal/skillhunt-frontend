@@ -48,8 +48,8 @@ const JobseekerProfile = () => {
         <div className="col-span-1 text-center border-b sm:border-b-0 sm:border-r lg:border-b-0 lg:border-r">
           {console.log(`${import.meta.env.VITE_API_URL}${data?.profile_img}`)}  {/* Log the constructed URL */}
           <img
-            src={data?.profile_img ? `${import.meta.env.VITE_API_URL}${data.profile_img}` : defaultProfileImg}
-      alt="Profile"
+  src={data?.profile_img ? `${import.meta.env.VITE_API_URL.replace(/\/+$/, '')}/${data.profile_img.replace(/^\/+/, '')}` : defaultProfileImg}
+  alt="Profile"
             className="w-32 h-32 rounded-full mx-auto mb-4"
           />
           <h2 className="text-xl font-bold mb-2">{displayField(data?.user?.username || 'John Doe')}</h2>
