@@ -34,9 +34,10 @@ const EmployerProfile = () => {
       <div className="bg-white shadow-lg rounded-lg p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Section - Profile Picture and Basic Info */}
         <div className="text-center md:border-r md:pr-4">
+          {console.log(`${import.meta.env.VITE_API_URL}${data?.profile_img}`)}  {/* Log the constructed URL */}
           <img
   src={data?.profile_img 
-    ? `https://api.skillhuntbackbynahima.online/${data.profile_img.replace(/^\/+/, '').replace(/^media\//, '')}`
+    ? `${import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')}/${data.profile_img.replace(/^\/+/, '')}` 
     : defaultProfileImg}
   alt="Profile"
             className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto mb-4"
