@@ -35,10 +35,10 @@ const EmployerProfile = () => {
         {/* Left Section - Profile Picture and Basic Info */}
         <div className="text-center md:border-r md:pr-4">
           <img
-    src={data?.profile_img 
-      ? `${import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')}/${data.profile_img.replace(/^\/+/, '')}` 
-      : defaultProfileImg}
-    alt="Profile"
+  src={data?.profile_img 
+    ? `https://api.skillhuntbackbynahima.online/${data.profile_img.replace(/^\/+/, '').replace(/^media\//, '')}`
+    : defaultProfileImg}
+  alt="Profile"
             className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto mb-4"
           />
           <h2 className="text-xl font-bold mb-2">{displayField(data?.user?.username || 'John Doe')}</h2>
