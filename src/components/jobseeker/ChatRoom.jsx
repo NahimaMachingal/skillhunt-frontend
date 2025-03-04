@@ -216,7 +216,7 @@ const isSendButtonDisabled = !data?.user?.is_subscribed && messages.length > 5;
       {/* Header */}
       <div className="flex items-center text-lg font-semibold mb-4 w-full px-4">
           <img
-        src={profilePic ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${profilePic}` : defaultProfileImg}
+        src={profilePic ? `${import.meta.env.VITE_API_URL.replace('/api', '')}/${profilePic.replace(/^\//, '')}` : defaultProfileImg}
         alt={`${otherPerson.username}'s profile`}
         className="w-10 h-10 rounded-full mr-3 object-cover border border-gray-300"
         />
