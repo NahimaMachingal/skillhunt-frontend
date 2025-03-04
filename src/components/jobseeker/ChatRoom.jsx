@@ -220,12 +220,12 @@ const isSendButtonDisabled = !data?.user?.is_subscribed && messages.length > 5;
     ? `${import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')}/${profilePic.replace(/^\/+/, '')}` 
     : defaultProfileImg)}  {/* Log the constructed URL */}
           <img
-        src={profilePic 
-      ? `${import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')}/${profilePic.replace(/^\/+/, '')}` 
-      : defaultProfileImg}
-        alt={`${otherPerson.username}'s profile`}
-        className="w-10 h-10 rounded-full mr-3 object-cover border border-gray-300"
-        />
+  src={profilePic 
+    ? `https://api.skillhuntbackbynahima.online/media/profile/${profilePic}` 
+    : defaultProfileImg}
+  alt={`${otherPerson.username}'s profile`}
+  className="w-10 h-10 rounded-full mr-3 object-cover border border-gray-300"
+/>
       <span className="truncate">Chat with {otherPerson.username}</span>
     
       </div>
