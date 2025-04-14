@@ -1,6 +1,5 @@
-# Skillhunt Job Portal
+## Skillhunt Job Portal
 
-![Skillhunt Logo](https://via.placeholder.com/150)
 
 ## 📋 Overview
 
