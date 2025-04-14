@@ -233,16 +233,10 @@ This project uses GitHub Actions for continuous integration and deployment:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 👥 Contributors
-
-- [Your Name](https://github.com/yourusername)
-- [Contributor 1](https://github.com/contributor1)
-- [Contributor 2](https://github.com/contributor2)
-
 ## 📞 Contact
 
 For any questions or suggestions, please open an issue or contact the repository owners.
 
 ---
 
-Made with ❤️ by the Skillhunt Team
+Made by ❤️ Nahima Machingal
