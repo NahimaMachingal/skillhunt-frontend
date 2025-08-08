@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const SubscriptionForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { accessToken } = useSelector((state) => state.auth);
   const { order, status, error } = useSelector((state) => state.subscription);
 
   // Function to dynamically load Razorpay script
@@ -25,6 +26,7 @@ const SubscriptionForm = () => {
 
   const handleSubscribe = async () => {
     try {
+      console.log("Access Token before subscription:",accessToken);
       const { order_id, amount, currency } = await dispatch(createSubscription()).unwrap();
 
       // Load Razorpay script if not already loaded
