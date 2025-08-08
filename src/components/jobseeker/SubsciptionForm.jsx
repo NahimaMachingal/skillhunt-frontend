@@ -9,6 +9,15 @@ const SubscriptionForm = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const { order, status, error } = useSelector((state) => state.subscription);
 
+  // **ADD THIS DEBUG CODE**
+  useEffect(() => {
+    console.log("=== AUTH DEBUG ===");
+    console.log("Access token:", accessToken);
+    console.log("Token type:", typeof accessToken);
+    console.log("Token length:", accessToken?.length);
+    console.log("First 20 chars:", accessToken?.substring(0, 20));
+  }, [accessToken]);
+
   // Function to dynamically load Razorpay script
   const loadRazorpayScript = () => {
     return new Promise((resolve, reject) => {
@@ -27,7 +36,14 @@ const SubscriptionForm = () => {
   const handleSubscribe = async () => {
     try {
       console.log("Access Token before subscription:",accessToken);
-      const { order_id, amount, currency } = await dispatch(createSubscription()).unwrap();
+      if (!accessToken) {
+      console.error("No access token available");
+      return;
+    }
+      const result = await dispatch(createSubscription()).unwrap();
+    console.log("Subscription result:", result);
+    
+    const { order_id, amount, currency } = result;
 
       // Load Razorpay script if not already loaded
       await loadRazorpayScript();
@@ -46,13 +62,13 @@ const SubscriptionForm = () => {
             razorpay_signature: response.razorpay_signature,
           };
 
-          // Dispatch verifyPayment action
-          console.log("Dispatching verifyPayment:", paymentData);
-
-          await dispatch(verifyPayment(paymentData));
-          // After successful payment verification, navigate to the payment success page
-          
-        },
+          try {
+          await dispatch(verifyPayment(paymentData)).unwrap();
+          navigate("/payment-success");
+        } catch (verifyError) {
+          console.error("Payment verification failed:", verifyError);
+        }
+      },
         modal: {
           ondismiss: function() {
             console.log("Payment Modal dismissed.");
