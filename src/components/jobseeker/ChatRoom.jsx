@@ -214,7 +214,7 @@ const isSendButtonDisabled = !data?.user?.is_subscribed && messages.length > 5;
   return (
     <div className="flex flex-col items-center p-4 bg-gray-100 w-full max-w-4xl mx-auto rounded-xl shadow-lg">
       {/* Header */}
-      <div className="flex items-center text-lg font-semibold mb-4 w-full px-4">
+      
         <div className="flex items-center text-lg font-semibold mb-4 w-full px-4">
   {console.log(profilePic 
     ? `${import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')}/${profilePic.replace(/^\/+/, '')}` 
@@ -234,8 +234,8 @@ const isSendButtonDisabled = !data?.user?.is_subscribed && messages.length > 5;
       <div
         ref={messagesContainerRef}
         className="w-full flex-grow overflow-y-auto bg-white p-4 rounded-lg mb-4 border border-gray-300"
-        style={{ height: "350px" }} // Set a fixed height for the messages container
-      onScroll={handleScroll} // Add the scroll handler to the container
+        style={{ height: "350px" }} 
+      onScroll={handleScroll}
     >
       {/* Only show the button if the message count is greater than 50 */}
       {showLoadButton && !isFetching && (
