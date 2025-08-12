@@ -63,9 +63,11 @@ const Login = () => {
       setLoading(false); // Stop loader after login attempt
     }
   };
-  
-  
-  
+
+
+  const handleForgotPassword = () => {
+    navigate('/forgotpassword');
+  }; 
 
   
   const handleLogin = async (values) => {
@@ -113,23 +115,25 @@ const Login = () => {
   const handleRegisterRedirect = () => {
     navigate('/register');
   };
-
-  return (
+return (
     <div className="flex justify-center items-center h-screen bg-purple-100">
       <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden w-11/12 md:w-3/4 lg:w-2/3">
         {/* Left Section - Login Form */}
         <div className="w-full md:w-1/2 p-8">
           <h2 className="text-3xl text-center text-cyan-800 font-bold mb-6 
-   bg-gradient-to-r from-gray-800 to-emerald-600 
-   bg-clip-text text-transparent shadow-lg">
-   Login For SkillHunt
+            bg-gradient-to-r from-gray-800 to-emerald-600 
+            bg-clip-text text-transparent shadow-lg">
+            Login For SkillHunt
           </h2>
+          
+          {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+          
           <Formik
             initialValues={{ email: '', password: '' }}
             validationSchema={validationSchema}
             onSubmit={handleLogin}
           >
-          <Form>
+            <Form>
               <div className="mb-4">
                 <Field
                   type="email"
@@ -150,25 +154,34 @@ const Login = () => {
                 <ErrorMessage name="password" component="p" className="text-red-500 text-sm mt-1" />
               </div>
 
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <input type="checkbox" id="rememberMe" className="mr-2"/>
-                <label htmlFor="rememberMe">Remember me</label>
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <input type="checkbox" id="rememberMe" className="mr-2"/>
+                  <label htmlFor="rememberMe">Remember me</label>
+                </div>
+                <button 
+                  type="button"
+                  onClick={handleForgotPassword} 
+                  className="text-purple-500 hover:underline bg-transparent border-none cursor-pointer"
+                >
+                  Forgot Password?
+                </button>
               </div>
-              <a href="/forgotpassword" className="text-purple-500 hover:underline">Forgot Password?</a>
-            </div>
-            <button type="submit" className="w-full p-3 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-300 flex items-center justify-center"
-            disabled={loading}
-            
-            >
-              {loading ? (
+
+              <button 
+                type="submit" 
+                className="w-full p-3 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-300 flex items-center justify-center"
+                disabled={loading}
+              >
+                {loading ? (
                   <span className="loader animate-spin w-4 h-4 border-2 border-white rounded-full"></span>
                 ) : (
                   'Login'
                 )}
-            </button>
-          </Form>
+              </button>
+            </Form>
           </Formik>
+
           <div className="mt-4 text-center">
             <p>
               Don't have an account?{' '}
@@ -180,15 +193,18 @@ const Login = () => {
               </span>
             </p>
           </div>
+
           <div className="flex items-center justify-center mt-6">
             <hr className="border-gray-300 w-1/3"/>
             <span className="text-gray-500 mx-2">or login with</span>
             <hr className="border-gray-300 w-1/3"/>
           </div>
+
           <div className="flex justify-center space-x-4 mt-4">
-          <div id="google-button"></div>
+            <div id="google-button"></div>
           </div>
         </div>
+
         {/* Right Section - Illustration */}
         <div className="hidden md:block md:w-1/2 bg-purple-100 p-8">
           <img
@@ -203,3 +219,4 @@ const Login = () => {
 };
 
 export default Login;
+  
