@@ -88,36 +88,6 @@ Skillhunt is a comprehensive job portal platform built with React and Redux Tool
    yarn build
    ```
 
-## 📁 Project Structure
-
-```
-skillhunt/
-├── public/
-├── src/
-│   ├── app/             # Redux store configuration
-│   ├── assets/          # Static assets
-│   ├── components/      # Reusable components
-│   ├── features/        # Feature-based modules with their slices
-│   │   ├── auth/
-│   │   ├── jobs/
-│   │   ├── profiles/
-│   │   ├── resume/
-│   │   ├── interview/
-│   │   ├── subscription/
-│   │   ├── chat/
-│   │   └── admin/
-│   ├── layouts/         # Layout components
-│   ├── pages/           # Page components
-│   ├── utils/           # Utility functions
-│   ├── AuthHoc.jsx      # Authentication Higher Order Component
-│   ├── App.js           # Application entry point
-│   └── index.js         # React DOM rendering
-├── .env.example
-├── .gitignore
-├── package.json
-└── README.md
-```
-
 ## 🔐 Authentication Flow
 
 The application uses JWT with refresh tokens for authentication:
